@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "pnpm with-env drizzle-kit push:pg",
+    "db:push": "npm run with-env drizzle-kit push:pg",
     "with-env": "dotenv -e ./.env"
   },
   "dependencies": {
