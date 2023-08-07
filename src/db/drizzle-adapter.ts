@@ -38,7 +38,7 @@ export function DrizzleAdapter(db: DB): Adapter {
           )
         )
         .limit(1)
-        .then((result) => result[0].users ?? null),
+        .then((result) => result[0]?.users ?? null),
     updateUser: ({ id, ...data }) =>
       db
         .update(users)

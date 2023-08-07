@@ -1,6 +1,14 @@
-import Image from 'next/image'
+import {
+  GitHubOAuthButton,
+  GoogleOAuthButton,
+  LogOutButton,
+} from "@/components/auth/oauth";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -15,7 +23,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -25,6 +33,18 @@ export default function Home() {
               priority
             />
           </a>
+        </div>
+        <div>
+          {session?.user.name}
+          {session?.user.email}
+          {session?.user.image && (
+            <Image
+              src={session.user.image}
+              alt="user avatar"
+              height={100}
+              width={100}
+            />
+          )}
         </div>
       </div>
 
@@ -47,7 +67,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
+            Docs{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -64,7 +84,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
+            Learn{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -81,7 +101,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
+            Templates{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -98,7 +118,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
+            Deploy{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -108,6 +128,9 @@ export default function Home() {
           </p>
         </a>
       </div>
+      <GitHubOAuthButton />
+      <GoogleOAuthButton />
+      <LogOutButton />
     </main>
-  )
+  );
 }

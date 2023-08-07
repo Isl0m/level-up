@@ -1,9 +1,10 @@
 import { db } from "@/db";
 import { DrizzleAdapter } from "@/db/drizzle-adapter";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { env } from "@/env.mjs";
 import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+// import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
@@ -15,50 +16,33 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         console.log(token, session);
         session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
         session.user.image = token.picture;
       }
       return session;
     },
     async jwt({ token, user }) {
       console.log(token, user);
-      const [dbUser] = await db
-        .select({
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          picture: users.image,
-        })
-        .from(users)
-        .where(eq(users.email, token.email || ""))
-        .limit(1);
-
-      if (dbUser) {
-        return dbUser;
-      }
 
       if (user) {
-        token.id = user.id;
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          picture: user.image,
+        };
       }
+
       return token;
     },
   },
   providers: [
-    CredentialsProvider({
-      name: "Sign in",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "example@example.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const user = { id: "1", name: "Admin", email: "admin@admin.com" };
-        return user;
-      },
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+    }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 };
