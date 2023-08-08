@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { Header } from "@/components/layout/header";
+import { Toaster } from "@ui/toaster";
+import { SessionProvider } from "@components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +22,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
-          {children}
+          <SessionProvider>
+            <Header />
+            {children}
+          </SessionProvider>
         </ThemeProvider>
+        <Toaster />
         <TailwindIndicator />
       </body>
     </html>
