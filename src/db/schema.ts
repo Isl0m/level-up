@@ -1,86 +1,64 @@
+import { InferModel } from "drizzle-orm"
 import {
-  index,
   integer,
   pgTable,
+  primaryKey,
   text,
   timestamp,
-  uniqueIndex,
-  varchar,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/pg-core"
+import { AdapterAccount } from "next-auth/adapters"
+
+export const users = pgTable("users", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name"),
+  surname: text("surname"),
+  email: text("email").notNull().unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  password: text("password"),
+  image: text("image"),
+})
+
+export type User = InferModel<typeof users>
+export type NewUser = InferModel<typeof users, "insert">
 
 export const accounts = pgTable(
   "accounts",
   {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    userId: varchar("userId", { length: 255 }).notNull(),
-    type: varchar("type", { length: 255 }).notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
     id_token: text("id_token"),
     session_state: text("session_state"),
-    refresh_token: text("refresh_token"),
-    scope: varchar("scope", { length: 255 }),
-    token_type: varchar("token_type", { length: 255 }),
-    createdAt: timestamp("createdAt").notNull().defaultNow(),
-    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
   },
   (account) => ({
-    providerProviderAccountIdIndex: uniqueIndex(
-      "accounts__provider__providerAccountId__idx"
-    ).on(account.provider, account.providerAccountId),
-    userIdIndex: index("accounts__userId__idx").on(account.userId),
+    compoundKey: primaryKey(account.provider, account.providerAccountId),
   })
-);
+)
 
-export const sessions = pgTable(
-  "sessions",
-  {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    sessionToken: varchar("sessionToken", { length: 255 }).notNull(),
-    userId: varchar("userId", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow(),
-  },
-  (session) => ({
-    sessionTokenIndex: uniqueIndex("sessions__sessionToken__idx").on(
-      session.sessionToken
-    ),
-    userIdIndex: index("sessions__userId__idx").on(session.userId),
-  })
-);
-
-export const users = pgTable(
-  "users",
-  {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    name: varchar("name", { length: 255 }),
-    email: varchar("email", { length: 255 }).notNull(),
-    emailVerified: timestamp("emailVerified"),
-    password: varchar("password", { length: 255 }),
-    image: varchar("image", { length: 255 }),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow(),
-  },
-  (user) => ({
-    emailIndex: uniqueIndex("users__email__idx").on(user.email),
-  })
-);
+export const sessions = pgTable("sessions", {
+  sessionToken: text("sessionToken").notNull().primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+})
 
 export const verificationTokens = pgTable(
-  "verification_tokens",
+  "verificationToken",
   {
-    identifier: varchar("identifier", { length: 255 }).primaryKey().notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (verificationToken) => ({
-    tokenIndex: uniqueIndex("verification_tokens__token__idx").on(
-      verificationToken.token
-    ),
+  (vt) => ({
+    compoundKey: primaryKey(vt.identifier, vt.token),
   })
-);
+)

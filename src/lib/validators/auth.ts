@@ -14,6 +14,10 @@ const passwordSchema = z
     message: "Password must contain at least 6 characters and one number",
   })
 
+const nameSchema = z
+  .string()
+  .min(2, { message: "Name must be at least 2 characters." })
+
 export const signInSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
@@ -22,5 +26,7 @@ export const signInSchema = z.object({
 export const signUpSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  name: nameSchema,
 })
+
+export const createUserSchema = signUpSchema

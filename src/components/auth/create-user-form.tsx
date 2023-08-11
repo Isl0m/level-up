@@ -3,11 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signIn } from "next-auth/react"
+import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { signUpSchema } from "@/lib/validators/auth"
+import { route } from "@/lib/config"
+import { createUserSchema } from "@/lib/validators/auth"
 import { Button } from "@ui/button"
 import {
   Form,
@@ -22,40 +23,38 @@ import { useToast } from "@ui/use-toast"
 
 import { Icons } from "../icons"
 
-type Inputs = z.infer<typeof signUpSchema>
+type Inputs = z.infer<typeof createUserSchema>
 
-export function SignUpForm() {
+export function CreateUserForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
   const { toast } = useToast()
+  const { push } = useRouter()
 
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
   })
 
   const onSubmit = async (values: Inputs) => {
-    setIsLoading(true)
-    const result = await signIn("credentials", {
-      ...values,
-      method: "signup",
-      redirect: false,
-    })
-    if (result?.error) {
+    try {
+      setIsLoading(true)
+      await axios.post(route.api.user, JSON.stringify(values))
+      push(route.dashboard)
+      setIsLoading(false)
+      form.reset()
+    } catch (error) {
       toast({
         variant: "destructive",
-        title: result.error,
+        title: "Something went wrong",
       })
       setIsLoading(false)
       return
     }
-    setIsLoading(false)
-    router.replace("/")
-    form.reset()
   }
   return (
     <Form {...form}>
@@ -101,7 +100,7 @@ export function SignUpForm() {
         />
         <Button disabled={isLoading} className="w-full">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Create account
+          Add user
         </Button>
       </form>
     </Form>

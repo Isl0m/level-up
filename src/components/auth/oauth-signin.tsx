@@ -1,10 +1,10 @@
 "use client"
 
+import { useState } from "react"
+import * as React from "react"
 import { OAuthProviderType } from "next-auth/providers"
 import { signIn } from "next-auth/react"
 
-import { useState } from "react"
-import * as React from "react"
 // import toast from "react-hot-toast";
 
 import { Icons } from "@/components/icons"
@@ -24,7 +24,10 @@ export function OAuthSignIn() {
 
   const oauthSignIn = async (providerType: OAuthProviderType) => {
     setIsLoading(providerType)
-    const res = await signIn(providerType)
+    const res = await signIn(providerType, {
+      redirect: false,
+      callbackUrl: "/",
+    })
     if (res?.ok || !res?.error) {
       setIsLoading(null)
       return

@@ -1,44 +1,38 @@
-import { Adapter } from "next-auth/adapters";
-import { DB } from ".";
-import { accounts, sessions, users, verificationTokens } from "./schema";
-import { createId } from "@paralleldrive/cuid2";
-import { and, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm"
+import { Adapter } from "next-auth/adapters"
+
+import { DB } from "."
+import { createUser, getUserByEmail } from "./queries"
+import { accounts, sessions, users, verificationTokens } from "./schema"
 
 export function DrizzleAdapter(db: DB): Adapter {
   return {
-    createUser: (user) =>
-      db
-        .insert(users)
-        .values({ id: createId(), ...user })
-        .returning()
-        .then((result) => result[0] ?? null),
+    createUser: (user) => createUser({ id: crypto.randomUUID(), ...user }),
     getUser: (id) =>
       db
         .select()
         .from(users)
         .where(eq(users.id, id))
-        .limit(1)
         .then((result) => result[0] ?? null),
-    getUserByEmail: (email) =>
-      db
-        .select()
-        .from(users)
-        .where(eq(users.email, email))
-        .limit(1)
-        .then((result) => result[0] ?? null),
-    getUserByAccount: ({ provider, providerAccountId }) =>
-      db
-        .select()
-        .from(users)
-        .innerJoin(accounts, eq(users.id, accounts.id))
-        .where(
-          and(
-            eq(accounts.providerAccountId, providerAccountId),
-            eq(accounts.provider, provider)
+    getUserByEmail,
+    getUserByAccount: async ({ provider, providerAccountId }) => {
+      const dbAccount =
+        (await db
+          .select()
+          .from(users)
+          .innerJoin(accounts, eq(users.id, accounts.userId))
+          .where(
+            and(
+              eq(accounts.providerAccountId, providerAccountId),
+              eq(accounts.provider, provider)
+            )
           )
-        )
-        .limit(1)
-        .then((result) => result[0]?.users ?? null),
+          .then((result) => result[0])) ?? null
+
+      if (!dbAccount) return null
+
+      return dbAccount.user
+    },
     updateUser: ({ id, ...data }) =>
       db
         .update(users)
@@ -47,13 +41,10 @@ export function DrizzleAdapter(db: DB): Adapter {
         .returning()
         .then((result) => result[0] ?? null),
     deleteUser: async (userId) => {
-      await db.delete(users).where(eq(users.id, userId));
+      await db.delete(users).where(eq(users.id, userId))
     },
     linkAccount: async (account) => {
-      await db.insert(accounts).values({
-        id: createId(),
-        ...account,
-      });
+      await db.insert(accounts).values(account)
     },
     unlinkAccount: async ({ provider, providerAccountId }) => {
       await db
@@ -63,29 +54,23 @@ export function DrizzleAdapter(db: DB): Adapter {
             eq(accounts.provider, provider),
             eq(accounts.providerAccountId, providerAccountId)
           )
-        );
+        )
     },
     getSessionAndUser: (sessionToken) =>
       db
         .select({
           user: users,
-          session: {
-            id: sessions.id,
-            userId: sessions.userId,
-            sessionToken: sessions.sessionToken,
-            expires: sessions.expires,
-          },
+          session: sessions,
         })
         .from(sessions)
         .innerJoin(users, eq(users.id, sessions.userId))
         .where(eq(sessions.sessionToken, sessionToken))
-        .limit(1)
         .then((result) => result[0] ?? null),
 
     createSession: (data) =>
       db
         .insert(sessions)
-        .values({ id: createId(), ...data })
+        .values(data)
         .returning()
         .then((result) => result[0] ?? null),
     updateSession: ({ sessionToken, ...data }) =>
@@ -96,7 +81,7 @@ export function DrizzleAdapter(db: DB): Adapter {
         .returning()
         .then((result) => result[0] ?? null),
     deleteSession: async (sessionToken) => {
-      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken));
+      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken))
     },
     createVerificationToken: (verificationToken) =>
       db
@@ -113,9 +98,9 @@ export function DrizzleAdapter(db: DB): Adapter {
             eq(verificationTokens.identifier, identifier)
           )
         )
-        .returning();
+        .returning()
 
-      return verificationToken;
+      return verificationToken
     },
-  };
+  }
 }

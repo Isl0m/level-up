@@ -1,0 +1,11 @@
+{
+  "signin": "/signin",
+  "signup": "/signup",
+  "api": {
+    "user": "/api/user"
+  },
+  "create-user": "/dashboard/create-user",
+  "dashboard": "/dashboard",
+  "home": "/",
+  "profile": "/profile"
+}

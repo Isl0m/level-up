@@ -1,6 +1,5 @@
-import { createId } from "@paralleldrive/cuid2"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { compare, genSalt, hash } from "bcryptjs"
-import { eq } from "drizzle-orm"
 import {
   getServerSession as getNextAuthServerSession,
   type NextAuthOptions,
@@ -10,8 +9,7 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 
 import { db } from "@/db"
-import { DrizzleAdapter } from "@/db/drizzle-adapter"
-import { users } from "@/db/schema"
+import { createUserWithPassword, getUserByEmail } from "@/db/queries"
 import { env } from "@/env.mjs"
 
 import { authMethodSchema, signInSchema, signUpSchema } from "./validators/auth"
@@ -19,7 +17,10 @@ import { authMethodSchema, signInSchema, signUpSchema } from "./validators/auth"
 const drizzleAdapter = DrizzleAdapter(db)
 
 export const authOptions: NextAuthOptions = {
-  adapter: drizzleAdapter,
+  pages: {
+    signIn: "/signin",
+    newUser: "/signup",
+  },
   session: {
     strategy: "jwt",
   },
@@ -44,6 +45,8 @@ export const authOptions: NextAuthOptions = {
       return token
     },
   },
+  // @ts-ignore
+  adapter: drizzleAdapter,
   providers: [
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
@@ -82,12 +85,7 @@ export const authOptions: NextAuthOptions = {
           if (method === "signin") {
             const { email, password } = signInSchema.parse(credentials)
 
-            const user = await db
-              .select()
-              .from(users)
-              .where(eq(users.email, email))
-              .limit(1)
-              .then((result) => result[0] ?? null)
+            const user = await getUserByEmail(email)
             if (!user) return null
 
             const isValid =
@@ -103,20 +101,9 @@ export const authOptions: NextAuthOptions = {
           }
 
           if (method === "signup") {
-            const { email, password, name } = signUpSchema.parse(credentials)
+            const data = signUpSchema.parse(credentials)
 
-            const salt = await genSalt(12)
-
-            const user = await db
-              .insert(users)
-              .values({
-                id: createId(),
-                email,
-                name,
-                password: await hash(password, salt),
-              })
-              .returning()
-              .then((result) => result[0] ?? null)
+            const user = await createUserWithPassword(data)
 
             return {
               id: user.id,

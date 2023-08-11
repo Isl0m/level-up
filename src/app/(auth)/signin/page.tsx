@@ -1,11 +1,15 @@
-import { OAuthSignIn } from "@components/auth/oauth-signin";
-import { SignInForm } from "@components/auth/sigin-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
+import Link from "next/link"
+import { OAuthSignIn } from "@components/auth/oauth-signin"
+import { SignInForm } from "@components/auth/signin-form"
+
+import { route } from "@/lib/config"
+import { Button } from "@ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card"
 
 export default function SignIn() {
   return (
     <main className="container py-8">
-      <Card className="max-w-md mx-auto">
+      <Card className="mx-auto max-w-md">
         <CardHeader>
           <CardTitle>Log in to account</CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -26,7 +30,15 @@ export default function SignIn() {
           </div>
           <SignInForm />
         </CardContent>
+        <CardFooter className="flex items-center">
+          <p className="text-sm text-muted-foreground">
+            Don&apos;t have an account?
+          </p>
+          <Button asChild variant="link">
+            <Link href={route.signup}>Sign up</Link>
+          </Button>
+        </CardFooter>
       </Card>
     </main>
-  );
+  )
 }
