@@ -1,8 +1,10 @@
 import { genSalt, hash } from "bcryptjs"
 import { eq } from "drizzle-orm"
 
+import { UpdateUser } from "@/lib/validators/user"
+
 import { db } from "./index"
-import { NewUser, User, users } from "./schema"
+import { NewUser, User, UserRole, users } from "./schema"
 
 export function getUsers(): Promise<User[]> {
   return db.select().from(users)
@@ -26,7 +28,6 @@ export function createUser(
     .then((res) => res[0])
 }
 
-// TODO Fix this
 export async function createUserWithPassword(
   data: Omit<NewUser, "id"> & {
     password: NonNullable<Required<NewUser>["password"]>
@@ -46,13 +47,14 @@ export async function createUserWithPassword(
     .then((res) => res[0])
 }
 
-type UpdateUser = Partial<User> & { id: User["id"] }
-
-export function updateUser(user: UpdateUser): Promise<User> {
+export function updateUser(
+  user: UpdateUser,
+  userId: User["id"]
+): Promise<User> {
   return db
     .update(users)
     .set(user)
-    .where(eq(users.id, user.id))
+    .where(eq(users.id, userId))
     .returning()
     .then((res) => res[0])
 }

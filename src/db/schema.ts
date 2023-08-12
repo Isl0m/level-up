@@ -1,12 +1,15 @@
 import { InferModel } from "drizzle-orm"
 import {
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
 import { AdapterAccount } from "next-auth/adapters"
+
+export const roleEnum = pgEnum("role", ["user", "admin"])
 
 export const users = pgTable("users", {
   id: text("id").notNull().primaryKey(),
@@ -16,9 +19,12 @@ export const users = pgTable("users", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   password: text("password"),
   image: text("image"),
+  role: roleEnum("role").default("user").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
 })
 
 export type User = InferModel<typeof users>
+export type UserRole = User["role"]
 export type NewUser = InferModel<typeof users, "insert">
 
 export const accounts = pgTable(

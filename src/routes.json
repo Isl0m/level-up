@@ -2,7 +2,8 @@
   "signin": "/signin",
   "signup": "/signup",
   "api": {
-    "user": "/api/user"
+    "user": "/api/user",
+    "update": "/api/user/update"
   },
   "create-user": "/dashboard/create-user",
   "dashboard": "/dashboard",
