@@ -12,7 +12,7 @@ import { route } from "@/lib/config"
 import {
   createCourseFormSchema,
   createCourseSchema,
-} from "@/lib/validators/user"
+} from "@/lib/validators/course"
 import { Button } from "@ui/button"
 import {
   Form,
@@ -99,19 +99,20 @@ export function CreateCourseForm() {
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input type="file" {...field} />
+                {/* <Input type="file" {...field} /> */}
+                <Input placeholder="Enter course image url..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
         <FormField
           control={form.control}
           name="price"
@@ -122,8 +123,6 @@ export function CreateCourseForm() {
                 <Input
                   placeholder="Enter course price..."
                   type="number"
-                  min={0}
-                  max={10}
                   {...field}
                 />
               </FormControl>

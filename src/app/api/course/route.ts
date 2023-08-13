@@ -1,4 +1,4 @@
-import { createCourseSchema } from "@/lib/validators/user"
+import { createCourseSchema } from "@/lib/validators/course"
 import { createCourse } from "@/db/queries"
 
 export async function POST(request: Request) {

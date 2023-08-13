@@ -39,7 +39,9 @@ function DropdownAvatar({
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src={imageSrc} />
-          <AvatarFallback>{fallbackText}</AvatarFallback>
+          <AvatarFallback className="select-none">
+            {fallbackText}
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

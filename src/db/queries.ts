@@ -1,13 +1,29 @@
 import { genSalt, hash } from "bcryptjs"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 
-import { CreateCourse, UpdateUser } from "@/lib/validators/user"
+import { CreateCourse } from "@/lib/validators/course"
+import { UpdateUser } from "@/lib/validators/user"
 
 import { db } from "./index"
 import { Course, courses, NewUser, User, users } from "./schema"
 
 export function getUsers(): Promise<User[]> {
   return db.select().from(users).orderBy(users.createdAt)
+}
+
+export function getUsersCount(): Promise<number> {
+  return db
+    .select({ count: sql<number>`count(*)` })
+    .from(users)
+    .then((res) => res[0].count)
+}
+
+export function getUsersCountLastMonth(): Promise<number> {
+  return db
+    .select({ count: sql<number>`count(*)` })
+    .from(users)
+    .where(sql`"createdAt" > now() - interval '1 month'`)
+    .then((res) => res[0].count)
 }
 
 export function getUserByEmail(email: string): Promise<User | null> {

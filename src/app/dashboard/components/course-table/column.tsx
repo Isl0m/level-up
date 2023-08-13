@@ -30,11 +30,15 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "rating",
     header: "Rating",
+    cell: ({ row }) => row.original.rating || "Null",
   },
   {
-    accessorKey: "price",
     header: "Price",
+    cell: ({ row }) => {
+      const price = row.original.price
+      if (!price) return "Null"
+      return Intl.NumberFormat(navigator.language).format(price)
+    },
   },
 ]
