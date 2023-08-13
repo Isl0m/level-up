@@ -1,9 +1,8 @@
-import { Suspense } from "react"
-
 import { Heading } from "@ui/heading"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/tabs"
 
-import { UserTable } from "./components/user-table"
+import { CourseTable } from "./components/course-table/course-table"
+import { UserTable } from "./components/user-table/user-table"
 
 export default function Dashboard() {
   return (
@@ -17,10 +16,12 @@ export default function Dashboard() {
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <TabsContent value="users">
-          <Suspense fallback={<>Loading...</>}>
-            {/* @ts-expect-error Server Component */}
-            <UserTable />
-          </Suspense>
+          {/* @ts-expect-error Server Component */}
+          <UserTable />
+        </TabsContent>
+        <TabsContent value="courses">
+          {/* @ts-expect-error Server Component */}
+          <CourseTable />
         </TabsContent>
       </Tabs>
     </main>

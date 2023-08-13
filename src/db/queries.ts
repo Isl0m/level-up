@@ -1,13 +1,13 @@
 import { genSalt, hash } from "bcryptjs"
 import { eq } from "drizzle-orm"
 
-import { UpdateUser } from "@/lib/validators/user"
+import { CreateCourse, UpdateUser } from "@/lib/validators/user"
 
 import { db } from "./index"
-import { NewUser, User, UserRole, users } from "./schema"
+import { Course, courses, NewUser, User, users } from "./schema"
 
 export function getUsers(): Promise<User[]> {
-  return db.select().from(users)
+  return db.select().from(users).orderBy(users.createdAt)
 }
 
 export function getUserByEmail(email: string): Promise<User | null> {
@@ -55,6 +55,18 @@ export function updateUser(
     .update(users)
     .set(user)
     .where(eq(users.id, userId))
+    .returning()
+    .then((res) => res[0])
+}
+
+export function getCourses(): Promise<Course[]> {
+  return db.select().from(courses).orderBy(courses.createdAt)
+}
+
+export function createCourse(data: CreateCourse): Promise<Course> {
+  return db
+    .insert(courses)
+    .values({ ...data, id: crypto.randomUUID() })
     .returning()
     .then((res) => res[0])
 }

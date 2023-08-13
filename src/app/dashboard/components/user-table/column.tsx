@@ -1,11 +1,7 @@
 "use client"
 
-import { useId } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@ui/badge"
-import { Checkbox } from "@ui/checkbox"
-import { Label } from "@ui/label"
 import { User } from "@/db/schema"
 
 import { DataTableColumnHeader } from "./data-table-column-header"

@@ -1,6 +1,6 @@
 import { getUsers } from "@/db/queries"
 
-import { columns } from "./columns"
+import { columns } from "./column"
 import { DataTable } from "./data-table"
 
 export async function UserTable() {

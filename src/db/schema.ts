@@ -27,6 +27,20 @@ export type User = InferModel<typeof users>
 export type UserRole = User["role"]
 export type NewUser = InferModel<typeof users, "insert">
 
+export const courses = pgTable("courses", {
+  id: text("id").notNull().primaryKey(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  rating: integer("rating"),
+  reviews: integer("reviews"),
+  price: integer("price"),
+  image: text("image"),
+  createdAt: timestamp("createdAt").defaultNow(),
+})
+
+export type Course = InferModel<typeof courses>
+
 export const accounts = pgTable(
   "accounts",
   {

@@ -2,9 +2,11 @@
   "signin": "/signin",
   "signup": "/signup",
   "api": {
+    "course": "/api/course",
     "user": "/api/user",
     "update": "/api/user/update"
   },
+  "create-course": "/dashboard/create-course",
   "create-user": "/dashboard/create-user",
   "dashboard": "/dashboard",
   "home": "/",
