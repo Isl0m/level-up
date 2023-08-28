@@ -2,13 +2,16 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Icons } from "@components/icons"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { route } from "@/lib/config"
-import { createUserSchema } from "@/lib/validators/auth"
+import {
+  createCourseFormSchema,
+  updateCourseSchema,
+} from "@/lib/validators/course"
 import { Button } from "@ui/button"
 import {
   Form,
@@ -19,43 +22,59 @@ import {
   FormMessage,
 } from "@ui/form"
 import { Input } from "@ui/input"
+import { Textarea } from "@ui/textarea"
 import { useToast } from "@ui/use-toast"
-
-import { Icons } from "../icons"
 import { trpc } from "@/app/_trpc/client"
 
-type Inputs = z.infer<typeof createUserSchema>
+type Inputs = z.input<typeof updateCourseSchema>
 
-export function CreateUserForm() {
-  const [isLoading, setIsLoading] = useState(false)
+export function EditCourseForm({
+  defaultValues,
+  courseId,
+}: {
+  defaultValues: Inputs
+  courseId: string
+}) {
   const { toast } = useToast()
   const { push } = useRouter()
-  const mutate = trpc.user.create.useMutation()
+  const { mutateAsync: updateCourse, isLoading } =
+    trpc.course.update.useMutation()
 
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(createUserSchema),
+    resolver: zodResolver(updateCourseSchema),
+    defaultValues,
   })
 
   const onSubmit = async (data: Inputs) => {
     try {
-      setIsLoading(true)
-      await mutate.mutateAsync(data)
+      await updateCourse({ id: courseId, data })
       push(route.dashboard)
-      setIsLoading(false)
       form.reset()
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
       })
-      setIsLoading(false)
       return
     }
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="slug"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
@@ -71,12 +90,15 @@ export function CreateUserForm() {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder="example@mail.com" {...field} />
+                <Textarea
+                  placeholder="Enter course description..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,12 +106,30 @@ export function CreateUserForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input placeholder="******" {...field} />
+                {/* <Input type="file" {...field} /> */}
+                <Input placeholder="Enter course image url..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter course price..."
+                  type="number"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,7 +137,7 @@ export function CreateUserForm() {
         />
         <Button disabled={isLoading} className="w-full">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Add user
+          Update course
         </Button>
       </form>
     </Form>

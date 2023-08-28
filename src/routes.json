@@ -1,14 +1,13 @@
 {
   "signin": "/signin",
   "signup": "/signup",
-  "api": {
-    "course": "/api/course",
-    "user": "/api/user",
-    "update": "/api/user/update"
+  "course": {
+    "create": "/dashboard/course/create",
+    "edit": "/dashboard/course/edit"
   },
-  "create-course": "/dashboard/create-course",
   "create-user": "/dashboard/create-user",
   "dashboard": "/dashboard",
   "home": "/",
-  "profile": "/profile"
+  "profile": "/profile",
+  "test": "/test"
 }

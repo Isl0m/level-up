@@ -7,7 +7,12 @@ import { User } from "@/db/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { UserRoleChanger } from "./user-role-changer"
 
-export const columns: ColumnDef<User>[] = [
+type Column = Omit<User, "createdAt" | "emailVerified"> & {
+  createdAt: string | null
+  emailVerified: string | null
+}
+
+export const columns: ColumnDef<Column>[] = [
   {
     header: "#",
     cell: ({ row }) => {
@@ -33,7 +38,9 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "Role",
     cell: ({ row }) => {
-      return <UserRoleChanger role={row.original.role} />
+      return (
+        <UserRoleChanger role={row.original.role} userId={row.original.id} />
+      )
     },
   },
 ]

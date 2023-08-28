@@ -1,9 +1,13 @@
-import { getCourses } from "@/db/queries"
+"use client"
+
+import { trpc } from "@/app/_trpc/client"
 
 import { columns } from "./column"
 import { DataTable } from "./data-table"
 
-export async function CourseTable() {
-  const data = await getCourses()
-  return <DataTable data={data} columns={columns} />
+export function CourseTable() {
+  const { data, refetch } = trpc.course.getAll.useQuery()
+
+  if (data) return <DataTable data={data} columns={columns(refetch)} />
+  else return <p>Loading...</p>
 }

@@ -1,14 +1,20 @@
 import { genSalt, hash } from "bcryptjs"
 import { eq, sql } from "drizzle-orm"
 
-import { CreateCourse } from "@/lib/validators/course"
+import { CreateCourse, UpdateCourse } from "@/lib/validators/course"
 import { UpdateUser } from "@/lib/validators/user"
 
 import { db } from "./index"
 import { Course, courses, NewUser, User, users } from "./schema"
 
+const preparedGetAllUsers = db
+  .select()
+  .from(users)
+  .orderBy(users.createdAt)
+  .prepare("get-all-users")
+
 export function getUsers(): Promise<User[]> {
-  return db.select().from(users).orderBy(users.createdAt)
+  return preparedGetAllUsers.execute()
 }
 
 export function getUsersCount(): Promise<number> {
@@ -24,6 +30,14 @@ export function getUsersCountLastMonth(): Promise<number> {
     .from(users)
     .where(sql`"createdAt" > now() - interval '1 month'`)
     .then((res) => res[0].count)
+}
+
+export function getUserById(id: string): Promise<User | null> {
+  return db
+    .select()
+    .from(users)
+    .where(eq(users.id, id))
+    .then((res) => res[0] ?? null)
 }
 
 export function getUserByEmail(email: string): Promise<User | null> {
@@ -75,8 +89,22 @@ export function updateUser(
     .then((res) => res[0])
 }
 
+const preparedGetAllCourses = db
+  .select()
+  .from(courses)
+  .orderBy(courses.createdAt)
+  .prepare("get-all-courses")
+
 export function getCourses(): Promise<Course[]> {
-  return db.select().from(courses).orderBy(courses.createdAt)
+  return preparedGetAllCourses.execute()
+}
+
+export function getCourseById(id: string): Promise<Course | null> {
+  return db
+    .select()
+    .from(courses)
+    .where(eq(courses.id, id))
+    .then((res) => res[0] ?? null)
 }
 
 export function createCourse(data: CreateCourse): Promise<Course> {
@@ -85,4 +113,24 @@ export function createCourse(data: CreateCourse): Promise<Course> {
     .values({ ...data, id: crypto.randomUUID() })
     .returning()
     .then((res) => res[0])
+}
+
+export function updateCourse(
+  course: UpdateCourse,
+  courseId: Course["id"]
+): Promise<Course> {
+  return db
+    .update(courses)
+    .set(course)
+    .where(eq(courses.id, courseId))
+    .returning()
+    .then((res) => res[0])
+}
+
+export function deleteCourse(id: string): Promise<Course> {
+  return db
+    .delete(courses)
+    .where(eq(courses.id, id))
+    .returning()
+    .then((res) => res[0] ?? null)
 }

@@ -1,5 +1,5 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
-import { compare, genSalt, hash } from "bcryptjs"
+import { compare } from "bcryptjs"
 import {
   getServerSession as getNextAuthServerSession,
   type NextAuthOptions,
@@ -9,7 +9,11 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 
 import { db } from "@/db"
-import { createUserWithPassword, getUserByEmail } from "@/db/queries"
+import {
+  createUserWithPassword,
+  getUserByEmail,
+  getUserById,
+} from "@/db/queries"
 import { env } from "@/env.mjs"
 
 import { authMethodSchema, signInSchema, signUpSchema } from "./validators/auth"
@@ -29,16 +33,27 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id
         session.user.image = token.picture
+        session.user.role = token.role
       }
       return session
     },
     async jwt({ token, user }) {
+      if (user && !user.role) {
+        const res = await getUserById(user.id)
+        const role = res?.role ?? "user"
+
+        return {
+          ...user,
+          role,
+        }
+      }
       if (user) {
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           picture: user.image,
+          role: user.role,
         }
       }
 
@@ -97,6 +112,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               name: user.name,
               image: user.image,
+              role: user.role,
             }
           }
 
@@ -110,6 +126,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               name: user.name,
               image: user.image,
+              role: user.role,
             }
           }
 

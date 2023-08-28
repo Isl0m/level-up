@@ -1,9 +1,13 @@
-import { getUsers } from "@/db/queries"
+"use client"
+
+import { trpc } from "@/app/_trpc/client"
 
 import { columns } from "./column"
 import { DataTable } from "./data-table"
 
-export async function UserTable() {
-  const data = await getUsers()
-  return <DataTable data={data} columns={columns} />
+export function UserTable() {
+  const { data, refetch } = trpc.user.getAll.useQuery()
+
+  if (data) return <DataTable data={data} columns={columns} refetch={refetch} />
+  else return <p>Loading...</p>
 }

@@ -1,10 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icons } from "@components/icons"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -25,32 +23,32 @@ import {
 import { Input } from "@ui/input"
 import { Textarea } from "@ui/textarea"
 import { useToast } from "@ui/use-toast"
+import { trpc } from "@/app/_trpc/client"
 
-type Inputs = z.input<typeof createCourseFormSchema>
+type Inputs = z.input<typeof createCourseSchema>
+type Output = z.output<typeof createCourseSchema>
 
 export function CreateCourseForm() {
-  const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
   const { push } = useRouter()
+  const { mutateAsync: createCourse, isLoading } =
+    trpc.course.create.useMutation()
 
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(createCourseFormSchema),
   })
 
-  const onSubmit = async (data: Inputs) => {
+  const onSubmit = async (data: Output) => {
     try {
-      setIsLoading(true)
-      await axios.post(route.api.course, JSON.stringify(data))
+      await createCourse(data)
       push(route.dashboard)
-      setIsLoading(false)
       form.reset()
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
       })
-      setIsLoading(false)
       return
     }
   }

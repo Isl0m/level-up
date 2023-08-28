@@ -5,8 +5,11 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Course } from "@/db/schema"
 
 import { DataTableColumnHeader } from "./data-table-column-header"
+import { DataTableRowActions } from "./data-table-row-actions"
 
-export const columns: ColumnDef<Course>[] = [
+type Column = Omit<Course, "createdAt"> & { createdAt: string | null }
+
+export const columns = (refetch: unknown): ColumnDef<Column>[] => [
   {
     header: "#",
     cell: ({ row }) => {
@@ -38,7 +41,13 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const price = row.original.price
       if (!price) return "Null"
-      return Intl.NumberFormat(navigator.language).format(price)
+      return Intl.NumberFormat().format(price) // navigator.language
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <DataTableRowActions id={row.original.id} row={row} refetch={refetch} />
+    ),
   },
 ]

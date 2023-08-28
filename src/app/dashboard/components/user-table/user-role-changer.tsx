@@ -1,15 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import axios from "axios"
 import { Check } from "lucide-react"
 
-import { route } from "@/lib/config"
 import { cn } from "@/lib/utils"
-import { UpdateUser } from "@/lib/validators/user"
 import { Button } from "@ui/button"
 import { Command, CommandGroup, CommandItem } from "@ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover"
+import { trpc } from "@/app/_trpc/client"
 import { UserRole } from "@/db/schema"
 
 const roles: Record<UserRole, string> = {
@@ -17,21 +15,29 @@ const roles: Record<UserRole, string> = {
   user: "User",
 }
 
-export function UserRoleChanger({ role: defaultRole }: { role: UserRole }) {
+type Props = {
+  userId: string
+  role: UserRole
+}
+
+export function UserRoleChanger({ userId, role: defaultRole }: Props) {
   const [role, setRole] = useState(defaultRole)
   const [open, setOpen] = useState(false)
+  const {
+    mutateAsync: updateUser,
+    isSuccess,
+    status,
+  } = trpc.user.update.useMutation()
 
   const handleChangeRole = async (selectedRole: UserRole) => {
     if (selectedRole === role) return
 
-    const body: UpdateUser = { role: selectedRole }
-    const response = await axios.post(route.api.update, JSON.stringify(body))
-    if (response.status === 200) {
+    const data = { role: selectedRole }
+    await updateUser({ data, id: userId })
+    if (isSuccess) {
       setRole(selectedRole)
-      setOpen(false)
-    } else {
-      setOpen(false)
     }
+    setOpen(false)
   }
 
   return (

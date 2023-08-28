@@ -8,3 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

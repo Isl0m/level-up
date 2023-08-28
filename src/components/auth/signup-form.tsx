@@ -55,7 +55,7 @@ export function SignUpForm() {
       return
     }
     setIsLoading(false)
-    router.replace("/")
+    router.back()
     form.reset()
   }
   return (
