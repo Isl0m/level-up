@@ -13,14 +13,14 @@ type Props = {
 
 export default async function EditCourse({ searchParams }: Props) {
   if (!searchParams.id || Array.isArray(searchParams.id)) {
-    redirect(route.dashboard, RedirectType.replace)
+    redirect(route.dashboard.self, RedirectType.replace)
   }
 
   const course = await getCourseById(searchParams.id)
   const defaultValues = toUpdateCourseSchema.safeParse(course)
 
   if (!defaultValues.success || !defaultValues.data) {
-    redirect(route.dashboard, RedirectType.replace)
+    redirect(route.dashboard.self, RedirectType.replace)
   }
 
   return (

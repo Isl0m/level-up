@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icons } from "@components/icons"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -8,47 +7,47 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { route } from "@/lib/config"
-import {
-  createCourseFormSchema,
-  updateCourseSchema,
-} from "@/lib/validators/course"
+import { createLectureSchema } from "@/lib/validators/lecture"
 import { Button } from "@ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@ui/form"
 import { Input } from "@ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/select"
 import { Textarea } from "@ui/textarea"
 import { useToast } from "@ui/use-toast"
 import { trpc } from "@/app/_trpc/client"
 
-type Inputs = z.input<typeof updateCourseSchema>
+type Inputs = z.input<typeof createLectureSchema>
 
-export function EditCourseForm({
-  defaultValues,
-  courseId,
-}: {
-  defaultValues: Inputs
-  courseId: string
-}) {
+export function CreateLectureForm() {
   const { toast } = useToast()
   const { push } = useRouter()
-  const { mutateAsync: updateCourse, isLoading } =
-    trpc.course.update.useMutation()
-
+  const { mutateAsync: createLecture, isLoading } =
+    trpc.lecture.create.useMutation()
+  // TODO when no one course
+  const { data: courses, isLoading: coursesLoading } =
+    trpc.course.getAll.useQuery()
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(updateCourseSchema),
-    defaultValues,
+    resolver: zodResolver(createLectureSchema),
   })
 
   const onSubmit = async (data: Inputs) => {
     try {
-      await updateCourse({ id: courseId, data })
+      await createLecture(data)
       push(route.dashboard.self)
       form.reset()
     } catch (error) {
@@ -64,25 +63,12 @@ export function EditCourseForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="slug"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your name..." {...field} />
+                <Input placeholder="Enter your title..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +82,7 @@ export function EditCourseForm({
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Enter course description..."
+                  placeholder="Enter lecture description..."
                   {...field}
                 />
               </FormControl>
@@ -106,13 +92,13 @@ export function EditCourseForm({
         />
         <FormField
           control={form.control}
-          name="image"
+          name="video"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Video</FormLabel>
               <FormControl>
                 {/* <Input type="file" {...field} /> */}
-                <Input placeholder="Enter course image url..." {...field} />
+                <Input placeholder="Enter lecture video url..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,24 +106,40 @@ export function EditCourseForm({
         />
         <FormField
           control={form.control}
-          name="price"
+          name="courseId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter course price..."
-                  type="number"
-                  {...field}
-                />
-              </FormControl>
+              <FormLabel>Course</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select course" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {isLoading && (
+                    <SelectItem disabled value="loading">
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {courses?.map((course) => (
+                    <SelectItem key={course.id} value={course.id}>
+                      {course.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Choose for which course this lecture belongs to.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Button disabled={isLoading} className="w-full">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Update course
+          Add lecture
         </Button>
       </form>
     </Form>

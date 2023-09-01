@@ -23,18 +23,14 @@ type Props = {
 export function UserRoleChanger({ userId, role: defaultRole }: Props) {
   const [role, setRole] = useState(defaultRole)
   const [open, setOpen] = useState(false)
-  const {
-    mutateAsync: updateUser,
-    isSuccess,
-    status,
-  } = trpc.user.update.useMutation()
+  const { mutateAsync: updateUser, isError } = trpc.user.update.useMutation()
 
   const handleChangeRole = async (selectedRole: UserRole) => {
     if (selectedRole === role) return
 
     const data = { role: selectedRole }
     await updateUser({ data, id: userId })
-    if (isSuccess) {
+    if (!isError) {
       setRole(selectedRole)
     }
     setOpen(false)

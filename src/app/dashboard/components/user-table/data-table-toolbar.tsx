@@ -33,7 +33,7 @@ export function DataTableToolbar<TData>({
           Refresh
         </Button>
         <Button variant="outline" className="border-dashed" asChild>
-          <Link href={route["create-user"]}>
+          <Link href={route.dashboard["create-user"]}>
             <PlusCircle className="mr-2 h-4 w-4" />
             User
           </Link>

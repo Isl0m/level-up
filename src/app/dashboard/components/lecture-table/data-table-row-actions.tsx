@@ -28,12 +28,12 @@ export function DataTableRowActions<TData>({
   refetch,
 }: DataTableRowActionsProps<TData>) {
   const router = useRouter()
-  const { mutateAsync: deleteCourse } = trpc.course.delete.useMutation()
+  const { mutateAsync: deleteLecture } = trpc.lecture.delete.useMutation()
 
   const handleDeleteItem = async () => {
     const isYes = confirm("Do you really want to delete")
     if (isYes) {
-      await deleteCourse({ id })
+      await deleteLecture({ id })
 
       if (typeof refetch === "function") {
         refetch()
@@ -41,6 +41,7 @@ export function DataTableRowActions<TData>({
     }
   }
   const handleEditItem = () => {
+    // TODO
     router.push(route.dashboard.course.edit + `?id=${id}`)
   }
   return (

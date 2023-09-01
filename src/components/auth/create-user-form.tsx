@@ -20,9 +20,9 @@ import {
 } from "@ui/form"
 import { Input } from "@ui/input"
 import { useToast } from "@ui/use-toast"
+import { trpc } from "@/app/_trpc/client"
 
 import { Icons } from "../icons"
-import { trpc } from "@/app/_trpc/client"
 
 type Inputs = z.infer<typeof createUserSchema>
 
@@ -41,7 +41,7 @@ export function CreateUserForm() {
     try {
       setIsLoading(true)
       await mutate.mutateAsync(data)
-      push(route.dashboard)
+      push(route.dashboard.self)
       setIsLoading(false)
       form.reset()
     } catch (error) {

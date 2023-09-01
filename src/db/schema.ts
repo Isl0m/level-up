@@ -1,4 +1,4 @@
-import { InferModel } from "drizzle-orm"
+import { InferModel, relations } from "drizzle-orm"
 import {
   integer,
   pgEnum,
@@ -8,6 +8,8 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core"
 import { AdapterAccount } from "next-auth/adapters"
+
+import { db } from "."
 
 export const roleEnum = pgEnum("role", ["user", "admin"])
 
@@ -40,6 +42,30 @@ export const courses = pgTable("courses", {
 })
 
 export type Course = InferModel<typeof courses>
+
+export const courseRelations = relations(courses, ({ many }) => ({
+  lectures: many(lectures),
+}))
+
+export const lectures = pgTable("lectures", {
+  id: text("id").notNull().primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  video: text("video"),
+  duration: integer("duration"),
+  courseId: text("courseId")
+    .notNull()
+    .references(() => courses.id),
+})
+
+export type Lecture = InferModel<typeof lectures>
+
+export const lectureRelations = relations(lectures, ({ one }) => ({
+  course: one(courses, {
+    fields: [lectures.courseId],
+    references: [courses.id],
+  }),
+}))
 
 export const accounts = pgTable(
   "accounts",

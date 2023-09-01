@@ -2,10 +2,21 @@ import { genSalt, hash } from "bcryptjs"
 import { eq, sql } from "drizzle-orm"
 
 import { CreateCourse, UpdateCourse } from "@/lib/validators/course"
+import { CreateLecture, UpdateLecture } from "@/lib/validators/lecture"
 import { UpdateUser } from "@/lib/validators/user"
 
 import { db } from "./index"
-import { Course, courses, NewUser, User, users } from "./schema"
+import {
+  Course,
+  courses,
+  Lecture,
+  lectures,
+  NewUser,
+  User,
+  users,
+} from "./schema"
+
+// USERS QUERIES
 
 const preparedGetAllUsers = db
   .select()
@@ -89,6 +100,8 @@ export function updateUser(
     .then((res) => res[0])
 }
 
+// COURSES QUERIES
+
 const preparedGetAllCourses = db
   .select()
   .from(courses)
@@ -131,6 +144,61 @@ export function deleteCourse(id: string): Promise<Course> {
   return db
     .delete(courses)
     .where(eq(courses.id, id))
+    .returning()
+    .then((res) => res[0] ?? null)
+}
+
+// LECTURES QUERIES
+
+const preparedGetAllLectures = db
+  .select()
+  .from(lectures)
+  .prepare("get-all-lectures")
+
+export function getLectures(): Promise<Lecture[]> {
+  return preparedGetAllLectures.execute()
+}
+
+export function getLecturesWithCourse() {
+  return db.query.lectures.findMany({
+    with: {
+      course: true,
+    },
+  })
+}
+
+export function getLectureById(id: string): Promise<Lecture | null> {
+  return db
+    .select()
+    .from(lectures)
+    .where(eq(lectures.id, id))
+    .then((res) => res[0] ?? null)
+}
+
+export function createLecture(data: CreateLecture): Promise<Lecture> {
+  return db
+    .insert(lectures)
+    .values({ ...data, id: crypto.randomUUID() })
+    .returning()
+    .then((res) => res[0])
+}
+
+export function updateLecture(
+  lecture: UpdateLecture,
+  courseId: Lecture["id"]
+): Promise<Lecture> {
+  return db
+    .update(lectures)
+    .set(lecture)
+    .where(eq(courses.id, courseId))
+    .returning()
+    .then((res) => res[0])
+}
+
+export function deleteLecture(id: string): Promise<Lecture> {
+  return db
+    .delete(lectures)
+    .where(eq(lectures.id, id))
     .returning()
     .then((res) => res[0] ?? null)
 }

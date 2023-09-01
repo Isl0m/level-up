@@ -1,12 +1,17 @@
 {
   "signin": "/signin",
   "signup": "/signup",
-  "course": {
-    "create": "/dashboard/course/create",
-    "edit": "/dashboard/course/edit"
+  "dashboard": {
+    "course": {
+      "create": "/dashboard/course/create",
+      "edit": "/dashboard/course/edit"
+    },
+    "create-user": "/dashboard/create-user",
+    "lecture": {
+      "create": "/dashboard/lecture/create"
+    },
+    "self": "/dashboard"
   },
-  "create-user": "/dashboard/create-user",
-  "dashboard": "/dashboard",
   "home": "/",
   "profile": "/profile",
   "test": "/test"

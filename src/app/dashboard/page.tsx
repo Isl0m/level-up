@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/tabs"
 
 import { AnalyticsCards } from "./components/analytics/card"
 import { CourseTable } from "./components/course-table/course-table"
+import { LectureTable } from "./components/lecture-table/lecture-table"
 import { UserTable } from "./components/user-table/user-table"
 
 export const dynamic = "force-dynamic"
@@ -11,8 +12,9 @@ const tabs = [
   "analytics",
   "users",
   "courses",
-  "reports",
-  "notifications",
+  "lectures",
+  // "reports",
+  // "notifications",
 ] as const
 
 export default async function Dashboard() {
@@ -36,6 +38,9 @@ export default async function Dashboard() {
         </TabsContent>
         <TabsContent value="courses">
           <CourseTable />
+        </TabsContent>
+        <TabsContent value="lectures">
+          <LectureTable />
         </TabsContent>
       </Tabs>
     </main>

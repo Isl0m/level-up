@@ -42,7 +42,7 @@ export function CreateCourseForm() {
   const onSubmit = async (data: Output) => {
     try {
       await createCourse(data)
-      push(route.dashboard)
+      push(route.dashboard.self)
       form.reset()
     } catch (error) {
       toast({
