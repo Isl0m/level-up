@@ -7,12 +7,21 @@ import {
   deleteCourse,
   getCourseById,
   getCourses,
+  getCoursesCount,
   updateCourse,
 } from "@/db/queries"
 
 import { protectedProcedure, publicProcedure, router } from "../trpc"
 
 export const courseRouter = router({
+  getCount: publicProcedure.query(async () => {
+    try {
+      const courses = await getCoursesCount()
+      return courses
+    } catch (error) {
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
+    }
+  }),
   getAll: publicProcedure.query(async () => {
     try {
       const courses = await getCourses()

@@ -37,7 +37,6 @@ export function CreateLectureForm() {
   const { push } = useRouter()
   const { mutateAsync: createLecture, isLoading } =
     trpc.lecture.create.useMutation()
-  // TODO when no one course
   const { data: courses, isLoading: coursesLoading } =
     trpc.course.getAll.useQuery()
   const form = useForm<Inputs>({

@@ -102,6 +102,15 @@ export function updateUser(
 
 // COURSES QUERIES
 
+const preparedGetCoursesCount = db
+  .select({ count: sql<number>`count(*)` })
+  .from(courses)
+  .prepare("get-courses-count")
+
+export function getCoursesCount(): Promise<number> {
+  return preparedGetCoursesCount.execute()
+}
+
 const preparedGetAllCourses = db
   .select()
   .from(courses)
