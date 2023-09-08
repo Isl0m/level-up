@@ -1,29 +1,19 @@
-import { getUserByEmail } from "@/db/queries"
 import { initTRPC, TRPCError } from "@trpc/server"
-import { getServerSession } from "next-auth"
 
-const t = initTRPC.create()
+import { Context } from "./context"
 
-const isAuthed = t.middleware(async (opts) => {
-    const session = await getServerSession()
+const t = initTRPC.context<Context>().create()
 
-    if (!session) {
-        throw new TRPCError({ code: "UNAUTHORIZED" })
-    }
-
-    if ((!session.user.id || !session.user.role) && session.user.email) {
-        const user = await getUserByEmail(session.user.email)
-        if (user) {
-            session.user.id = user.id
-            session.user.id = user.role
-        }
-    }
-
-    return opts.next({
-        ctx: {
-            session,
-        },
-    })
+const isAuthed = t.middleware((opts) => {
+  const { ctx } = opts
+  if (!ctx.session) {
+    throw new TRPCError({ code: "UNAUTHORIZED" })
+  }
+  return opts.next({
+    ctx: {
+      session: ctx.session,
+    },
+  })
 })
 
 export const router = t.router

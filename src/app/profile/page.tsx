@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation"
 
-import { getServerSession } from "@/lib/auth"
+import { getUserAuth } from "@/lib/auth"
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar"
 import { Heading } from "@ui/heading"
 
 export default async function Profile() {
-  const session = await getServerSession()
+  const { session } = await getUserAuth()
   if (!session) {
     redirect("/home")
   }

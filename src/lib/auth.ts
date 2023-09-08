@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { compare } from "bcryptjs"
 import {
@@ -140,4 +141,12 @@ export const authOptions: NextAuthOptions = {
   ],
 }
 
-export const getServerSession = () => getNextAuthServerSession(authOptions)
+export const getUserAuth = async () => {
+  const session = await getNextAuthServerSession(authOptions)
+  return { session }
+}
+
+export const checkAuth = async () => {
+  const { session } = await getUserAuth()
+  if (!session) return redirect("api/auth/signin")
+}
