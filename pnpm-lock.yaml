@@ -92,6 +92,9 @@ dependencies:
   drizzle-orm:
     specifier: ^0.27.2
     version: 0.27.2(@neondatabase/serverless@0.5.7)(pg@8.11.3)(postgres@3.3.5)
+  drizzle-zod:
+    specifier: ^0.5.1
+    version: 0.5.1(drizzle-orm@0.27.2)(zod@3.22.2)
   eslint:
     specifier: 8.40.0
     version: 8.40.0
@@ -2839,6 +2842,16 @@ packages:
       '@neondatabase/serverless': 0.5.7
       pg: 8.11.3
       postgres: 3.3.5
+    dev: false
+
+  /drizzle-zod@0.5.1(drizzle-orm@0.27.2)(zod@3.22.2):
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
+    dependencies:
+      drizzle-orm: 0.27.2(@neondatabase/serverless@0.5.7)(pg@8.11.3)(postgres@3.3.5)
+      zod: 3.22.2
     dev: false
 
   /electron-to-chromium@1.4.502:

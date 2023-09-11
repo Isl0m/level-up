@@ -1,22 +1,17 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-import { User } from "@/db/schema"
+import { User } from "@/db/schema";
 
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { UserRoleChanger } from "./user-role-changer"
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { UserRoleChanger } from "./user-role-changer";
 
-type Column = Omit<User, "createdAt" | "emailVerified"> & {
-  createdAt: string | null
-  emailVerified: string | null
-}
-
-export const columns: ColumnDef<Column>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     header: "#",
     cell: ({ row }) => {
-      return row.index + 1
+      return row.index + 1;
     },
   },
   {
@@ -26,13 +21,13 @@ export const columns: ColumnDef<Column>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Name" />
+      return <DataTableColumnHeader column={column} title="Name" />;
     },
   },
   {
     accessorKey: "email",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Email" />
+      return <DataTableColumnHeader column={column} title="Email" />;
     },
   },
   {
@@ -40,7 +35,7 @@ export const columns: ColumnDef<Column>[] = [
     cell: ({ row }) => {
       return (
         <UserRoleChanger role={row.original.role} userId={row.original.id} />
-      )
+      );
     },
   },
-]
+];

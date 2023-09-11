@@ -1,26 +1,26 @@
-import { RedirectType } from "next/dist/client/components/redirect"
-import { redirect } from "next/navigation"
-import { EditCourseForm } from "@components/auth/edit-course-form"
+import { RedirectType } from "next/dist/client/components/redirect";
+import { redirect } from "next/navigation";
+import { EditCourseForm } from "@components/auth/edit-course-form";
 
-import { route } from "@/lib/config"
-import { toUpdateCourseSchema } from "@/lib/validators/course"
-import { Heading } from "@ui/heading"
-import { getCourseById } from "@/db/queries"
+import { getCourseById } from "@/lib/api/course/queries";
+import { route } from "@/lib/config";
+import { toUpdateCourseSchema } from "@/lib/validators/course";
+import { Heading } from "@ui/heading";
 
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export default async function EditCourse({ searchParams }: Props) {
   if (!searchParams.id || Array.isArray(searchParams.id)) {
-    redirect(route.dashboard.self, RedirectType.replace)
+    redirect(route.dashboard.self, RedirectType.replace);
   }
 
-  const course = await getCourseById(searchParams.id)
-  const defaultValues = toUpdateCourseSchema.safeParse(course)
+  const course = await getCourseById(searchParams.id);
+  const defaultValues = toUpdateCourseSchema.safeParse(course);
 
   if (!defaultValues.success || !defaultValues.data) {
-    redirect(route.dashboard.self, RedirectType.replace)
+    redirect(route.dashboard.self, RedirectType.replace);
   }
 
   return (
@@ -35,5 +35,5 @@ export default async function EditCourse({ searchParams }: Props) {
         />
       </div>
     </main>
-  )
+  );
 }

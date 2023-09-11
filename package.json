@@ -41,6 +41,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "drizzle-orm": "^0.27.2",
+    "drizzle-zod": "^0.5.1",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.12",
     "lucide-react": "^0.264.0",

@@ -1,21 +1,22 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Course, Lecture } from "@/db/schema"
+import { Course } from "@/db/schema/course";
+import { Lecture } from "@/db/schema/lecture";
 
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
 
-type CourseColumn = Omit<Course, "createdAt"> & { createdAt: string | null }
-
-type Column = Lecture & { course: CourseColumn }
+type Column = Lecture & {
+  course: Course | null;
+};
 
 export const columns = (refetch: unknown): ColumnDef<Column>[] => [
   {
     header: "#",
     cell: ({ row }) => {
-      return row.index + 1
+      return row.index + 1;
     },
   },
   {
@@ -25,12 +26,12 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Name" />
+      return <DataTableColumnHeader column={column} title="Name" />;
     },
   },
   {
     header: "Course",
-    cell: ({ row }) => row.original.course.name,
+    cell: ({ row }) => row.original.course?.name || "Null",
   },
   {
     id: "actions",
@@ -38,4 +39,4 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
       <DataTableRowActions id={row.original.id} row={row} refetch={refetch} />
     ),
   },
-]
+];

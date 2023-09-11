@@ -1,17 +1,13 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Icons } from "@components/icons"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useRouter } from "next/navigation";
+import { Icons } from "@components/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { route } from "@/lib/config"
-import {
-  createCourseFormSchema,
-  createCourseSchema,
-} from "@/lib/validators/course"
-import { Button } from "@ui/button"
+import { route } from "@/lib/config";
+import { Button } from "@ui/button";
 import {
   Form,
   FormControl,
@@ -19,39 +15,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ui/form"
-import { Input } from "@ui/input"
-import { Textarea } from "@ui/textarea"
-import { useToast } from "@ui/use-toast"
-import { trpc } from "@/app/_trpc/client"
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { Textarea } from "@ui/textarea";
+import { useToast } from "@ui/use-toast";
+import { trpc } from "@/app/_trpc/client";
+import { insertCourseFormSchema } from "@/db/schema/course";
 
-type Inputs = z.input<typeof createCourseSchema>
-type Output = z.output<typeof createCourseSchema>
+type Inputs = z.input<typeof insertCourseFormSchema>;
 
 export function CreateCourseForm() {
-  const { toast } = useToast()
-  const { push } = useRouter()
+  const { toast } = useToast();
+  const { push } = useRouter();
   const { mutateAsync: createCourse, isLoading } =
-    trpc.course.create.useMutation()
+    trpc.course.create.useMutation();
 
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(createCourseFormSchema),
-  })
+    resolver: zodResolver(insertCourseFormSchema),
+  });
 
-  const onSubmit = async (data: Output) => {
+  const onSubmit = async (data: Inputs) => {
     try {
-      await createCourse(data)
-      push(route.dashboard.self)
-      form.reset()
+      await createCourse(data);
+      push(route.dashboard.self);
+      form.reset();
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-      })
-      return
+      });
+      return;
     }
-  }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -134,5 +130,5 @@ export function CreateCourseForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

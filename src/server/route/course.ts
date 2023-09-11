@@ -1,93 +1,32 @@
-import { TRPCError } from "@trpc/server"
-import { z, ZodError } from "zod"
+import { z } from "zod";
 
-import { createCourseSchema, updateCourseSchema } from "@/lib/validators/course"
 import {
   createCourse,
   deleteCourse,
+  updateCourse,
+} from "@/lib/api/course/mutations";
+import {
   getCourseById,
   getCourses,
   getCoursesCount,
-  updateCourse,
-} from "@/db/queries"
+} from "@/lib/api/course/queries";
+import { insertCourseSchema, updateCourseSchema } from "@/db/schema/course";
 
-import { protectedProcedure, publicProcedure, router } from "../trpc"
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const courseRouter = router({
-  getCount: publicProcedure.query(async () => {
-    try {
-      const courses = await getCoursesCount()
-      return courses
-    } catch (error) {
-      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-    }
-  }),
-  getAll: publicProcedure.query(async () => {
-    try {
-      const courses = await getCourses()
-      return courses
-    } catch (error) {
-      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-    }
-  }),
+  getCount: publicProcedure.query(async () => await getCoursesCount()),
+  getAll: publicProcedure.query(async () => await getCourses()),
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      try {
-        const course = await getCourseById(input.id)
-        return course
-      } catch (error) {
-        if (error instanceof ZodError)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: error.message,
-          })
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-      }
-    }),
+    .query(async ({ input }) => await getCourseById(input.id)),
   create: protectedProcedure
-    .input(createCourseSchema)
-    .mutation(async ({ input }) => {
-      try {
-        const course = await createCourse(input)
-        return course
-      } catch (error) {
-        if (error instanceof ZodError)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: error.message,
-          })
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-      }
-    }),
+    .input(insertCourseSchema)
+    .mutation(async ({ input }) => await createCourse(input)),
   update: protectedProcedure
     .input(z.object({ id: z.string(), data: updateCourseSchema }))
-    .mutation(async ({ input }) => {
-      try {
-        const course = await updateCourse(input.data, input.id)
-        return course
-      } catch (error) {
-        if (error instanceof ZodError)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: error.message,
-          })
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-      }
-    }),
+    .mutation(async ({ input }) => await updateCourse(input.data, input.id)),
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
-      try {
-        const course = await deleteCourse(input.id)
-        return course
-      } catch (error) {
-        if (error instanceof ZodError)
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: error.message,
-          })
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" })
-      }
-    }),
-})
+    .mutation(async ({ input }) => await deleteCourse(input.id)),
+});

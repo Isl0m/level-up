@@ -1,12 +1,12 @@
-import { User } from "lucide-react"
+import { User } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@ui/card"
-import { Heading } from "@ui/heading"
-import { getUsersCount, getUsersCountLastMonth } from "@/db/queries"
+import { getUsersCount, getUsersCountLastMonth } from "@/lib/api/user/queries";
+import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
+import { Heading } from "@ui/heading";
 
 export async function AnalyticsCards() {
-  const usersCount = await getUsersCount()
-  const usersCountLastMonth = await getUsersCountLastMonth()
+  const usersCount = await getUsersCount();
+  const usersCountLastMonth = await getUsersCountLastMonth();
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card className="max-w-xs">
@@ -62,5 +62,5 @@ export async function AnalyticsCards() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

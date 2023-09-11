@@ -1,25 +1,26 @@
-import { redirect } from "next/navigation"
-import { DrizzleAdapter } from "@auth/drizzle-adapter"
-import { compare } from "bcryptjs"
+import { redirect } from "next/navigation";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { compare } from "bcryptjs";
 import {
   getServerSession as getNextAuthServerSession,
   type NextAuthOptions,
-} from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
+} from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
-import { db } from "@/db"
+import { db } from "@/db";
+import { env } from "@/env.mjs";
+
+import { createUserWithPassword } from "./api/user/mutations";
+import { getUserByEmail, getUserById } from "./api/user/queries";
 import {
-  createUserWithPassword,
-  getUserByEmail,
-  getUserById,
-} from "@/db/queries"
-import { env } from "@/env.mjs"
+  authMethodSchema,
+  signInSchema,
+  signUpSchema,
+} from "./validators/auth";
 
-import { authMethodSchema, signInSchema, signUpSchema } from "./validators/auth"
-
-const drizzleAdapter = DrizzleAdapter(db)
+const drizzleAdapter = DrizzleAdapter(db);
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -32,21 +33,21 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ token, session }) {
       if (token) {
-        session.user.id = token.id
-        session.user.image = token.picture
-        session.user.role = token.role
+        session.user.id = token.id;
+        session.user.image = token.picture;
+        session.user.role = token.role;
       }
-      return session
+      return session;
     },
     async jwt({ token, user }) {
       if (user && !user.role) {
-        const res = await getUserById(user.id)
-        const role = res?.role ?? "user"
+        const res = await getUserById(user.id);
+        const role = res?.role ?? "user";
 
         return {
           ...user,
           role,
-        }
+        };
       }
       if (user) {
         return {
@@ -55,10 +56,10 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           picture: user.image,
           role: user.role,
-        }
+        };
       }
 
-      return token
+      return token;
     },
   },
   // @ts-ignore
@@ -96,17 +97,17 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const method = authMethodSchema.parse(credentials?.method)
+          const method = authMethodSchema.parse(credentials?.method);
 
           if (method === "signin") {
-            const { email, password } = signInSchema.parse(credentials)
+            const { email, password } = signInSchema.parse(credentials);
 
-            const user = await getUserByEmail(email)
-            if (!user) return null
+            const user = await getUserByEmail(email);
+            if (!user) return null;
 
             const isValid =
-              user.password && (await compare(password, user.password))
-            if (!isValid) return null
+              user.password && (await compare(password, user.password));
+            if (!isValid) return null;
 
             return {
               id: user.id,
@@ -114,13 +115,13 @@ export const authOptions: NextAuthOptions = {
               name: user.name,
               image: user.image,
               role: user.role,
-            }
+            };
           }
 
           if (method === "signup") {
-            const data = signUpSchema.parse(credentials)
+            const data = signUpSchema.parse(credentials);
 
-            const user = await createUserWithPassword(data)
+            const user = await createUserWithPassword(data);
 
             return {
               id: user.id,
@@ -128,25 +129,25 @@ export const authOptions: NextAuthOptions = {
               name: user.name,
               image: user.image,
               role: user.role,
-            }
+            };
           }
 
-          return null
+          return null;
         } catch (error) {
-          console.log(error)
-          return null
+          console.log(error);
+          return null;
         }
       },
     }),
   ],
-}
+};
 
 export const getUserAuth = async () => {
-  const session = await getNextAuthServerSession(authOptions)
-  return { session }
-}
+  const session = await getNextAuthServerSession(authOptions);
+  return { session };
+};
 
 export const checkAuth = async () => {
-  const { session } = await getUserAuth()
-  if (!session) return redirect("api/auth/signin")
-}
+  const { session } = await getUserAuth();
+  if (!session) return redirect("api/auth/signin");
+};
