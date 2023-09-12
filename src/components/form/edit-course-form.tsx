@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { route } from "@/lib/config";
+import { undefinedToNull } from "@/lib/utils";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -32,7 +33,7 @@ export function EditCourseForm({
   courseId: string;
 }) {
   const { toast } = useToast();
-  const { push } = useRouter();
+  const { back } = useRouter();
   const { mutateAsync: updateCourse, isLoading } =
     trpc.course.update.useMutation();
 
@@ -46,13 +47,9 @@ export function EditCourseForm({
     try {
       await updateCourse({
         id: courseId,
-        data: {
-          ...data,
-          description: data.description || null,
-          image: data.image || null,
-        },
+        data: undefinedToNull(data),
       });
-      push(route.dashboard.self);
+      back();
       form.reset();
     } catch (error) {
       toast({

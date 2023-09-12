@@ -26,7 +26,7 @@ type Inputs = z.input<typeof insertCourseFormSchema>;
 
 export function CreateCourseForm() {
   const { toast } = useToast();
-  const { push } = useRouter();
+  const { back } = useRouter();
   const { mutateAsync: createCourse, isLoading } =
     trpc.course.create.useMutation();
 
@@ -38,7 +38,7 @@ export function CreateCourseForm() {
   const onSubmit = async (data: Inputs) => {
     try {
       await createCourse(data);
-      push(route.dashboard.self);
+      back();
       form.reset();
     } catch (error) {
       toast({

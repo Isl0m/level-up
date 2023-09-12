@@ -28,7 +28,7 @@ type Inputs = z.infer<typeof createUserSchema>;
 export function CreateUserForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { push } = useRouter();
+  const { back } = useRouter();
   const mutate = trpc.user.create.useMutation();
 
   const form = useForm<Inputs>({
@@ -40,7 +40,7 @@ export function CreateUserForm() {
     try {
       setIsLoading(true);
       await mutate.mutateAsync(data);
-      push(route.dashboard.self);
+      back();
       setIsLoading(false);
       form.reset();
     } catch (error) {

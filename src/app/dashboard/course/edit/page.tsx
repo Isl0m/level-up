@@ -1,20 +1,12 @@
 import { RedirectType } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
-import { EditCourseForm } from "@components/auth/edit-course-form";
+import { EditCourseForm } from "@components/form/edit-course-form";
 
 import { getCourseById } from "@/lib/api/course/queries";
 import { route } from "@/lib/config";
+import { nullToUndefined, Prettify } from "@/lib/utils";
 import { Heading } from "@ui/heading";
-import { updateCourseSchema } from "@/db/schema/course";
-
-export const toUpdateCourseSchema = updateCourseSchema.transform((val) => ({
-  ...val,
-  description: val.description || undefined,
-  image: val.image || undefined,
-  rating: val.rating || undefined,
-  reviews: val.reviews || undefined,
-  price: val.price || undefined,
-}));
+import { selectCourseSchema } from "@/db/schema/course";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -26,12 +18,12 @@ export default async function EditCourse({ searchParams }: Props) {
   }
 
   const course = await getCourseById(searchParams.id);
-  const defaultValues = toUpdateCourseSchema.safeParse(course);
+  const parsedCourse = selectCourseSchema.safeParse(course);
 
-  if (!defaultValues.success || !defaultValues.data) {
+  if (!parsedCourse.success || !parsedCourse.data) {
     redirect(route.dashboard.self, RedirectType.replace);
   }
-
+  const defaultValues = nullToUndefined(parsedCourse.data);
   return (
     <main className="mx-auto max-w-md py-8">
       <Heading variant={"h2"} className="mb-8">
@@ -40,7 +32,7 @@ export default async function EditCourse({ searchParams }: Props) {
       <div className="max-w-md ">
         <EditCourseForm
           courseId={searchParams.id}
-          defaultValues={defaultValues.data}
+          defaultValues={defaultValues}
         />
       </div>
     </main>

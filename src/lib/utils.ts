@@ -70,3 +70,40 @@ export function nullableToOptionalObject<Schema extends z.AnyZodObject>(
 
   return z.object(newProps);
 }
+
+type Entries<T> = {
+  [K in keyof T]: [K, T[K]];
+}[keyof T][];
+
+export type UndefinedToNull<T extends object> = {
+  [K in keyof T]-?: T[K] extends undefined ? null : T[K];
+};
+
+export function undefinedToNull<T extends object>(data: T): UndefinedToNull<T> {
+  const newObject = {} as UndefinedToNull<T>;
+  const object = structuredClone(data);
+
+  for (const key in object) {
+    const value = object[key];
+    newObject[key] = value === undefined ? (null as any) : value;
+  }
+
+  return newObject;
+}
+
+type ReplaceNullWithUndefined<T> = T extends null ? undefined : T;
+export type NullToUndefined<T extends object> = {
+  [K in keyof T]: ReplaceNullWithUndefined<T[K]>;
+};
+
+export function nullToUndefined<T extends object>(data: T): NullToUndefined<T> {
+  const newObject = {} as NullToUndefined<T>;
+  const object = structuredClone(data);
+
+  for (const key in object) {
+    const value = object[key];
+    newObject[key] = value === null ? (undefined as any) : value;
+  }
+
+  return newObject;
+}

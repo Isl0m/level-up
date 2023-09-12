@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { courses } from "@/db/schema/course";
 import {
   Lecture,
   lectures,
@@ -19,12 +18,12 @@ export function createLecture(data: NewLecture): Promise<Lecture> {
 
 export function updateLecture(
   lecture: UpdateLecture,
-  courseId: string
+  lectureId: string
 ): Promise<Lecture> {
   return db
     .update(lectures)
     .set(lecture)
-    .where(eq(courses.id, courseId))
+    .where(eq(lectures.id, lectureId))
     .returning()
     .then((res) => res[0]);
 }

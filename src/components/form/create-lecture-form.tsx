@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { route } from "@/lib/config";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -34,7 +33,7 @@ type Inputs = z.input<typeof insertLectureFormSchema>;
 
 export function CreateLectureForm() {
   const { toast } = useToast();
-  const { push } = useRouter();
+  const { back } = useRouter();
   const { mutateAsync: createLecture, isLoading } =
     trpc.lecture.create.useMutation();
   const { data: courses, isLoading: coursesLoading } =
@@ -47,7 +46,7 @@ export function CreateLectureForm() {
   const onSubmit = async (data: Inputs) => {
     try {
       await createLecture(data);
-      push(route.dashboard.self);
+      back();
       form.reset();
     } catch (error) {
       toast({

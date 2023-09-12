@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -16,8 +17,16 @@ export const courses = pgTable("courses", {
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
-export const insertCourseSchema = createInsertSchema(courses);
-export const selectCourseSchema = createSelectSchema(courses);
+export const insertCourseSchema = createInsertSchema(courses, {
+  rating: z.number().nullable(),
+  reviews: z.number().nullable(),
+  price: z.number().nullable(),
+});
+export const selectCourseSchema = createSelectSchema(courses, {
+  rating: z.number().nullable(),
+  reviews: z.number().nullable(),
+  price: z.number().nullable(),
+});
 export const updateCourseSchema = selectCourseSchema;
 
 export type Course = z.infer<typeof selectCourseSchema>;

@@ -8,7 +8,8 @@
     },
     "create-user": "/dashboard/create-user",
     "lecture": {
-      "create": "/dashboard/lecture/create"
+      "create": "/dashboard/lecture/create",
+      "edit": "/dashboard/lecture/edit"
     },
     "self": "/dashboard"
   },

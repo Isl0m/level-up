@@ -17,8 +17,12 @@ export const lectures = pgTable("lectures", {
     .references(() => courses.id, { onDelete: "cascade" }),
 });
 
-export const selectLectureSchema = createSelectSchema(lectures);
-export const insertLectureSchema = createInsertSchema(lectures);
+export const selectLectureSchema = createSelectSchema(lectures, {
+  duration: z.number().nullable(),
+});
+export const insertLectureSchema = createInsertSchema(lectures, {
+  duration: z.number().nullable(),
+});
 export const updateLectureSchema = selectLectureSchema;
 
 export type Lecture = z.infer<typeof selectLectureSchema>;

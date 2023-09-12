@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { route } from "@/lib/config";
+import { undefinedToNull } from "@/lib/utils";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -40,9 +40,10 @@ export function EditLectureForm({
   lectureId: string;
 }) {
   const { toast } = useToast();
-  const { push } = useRouter();
+  const { back } = useRouter();
   const { mutateAsync: updateLecture, isLoading } =
     trpc.lecture.update.useMutation();
+
   const { data: courses, isLoading: coursesLoading } =
     trpc.course.getAll.useQuery();
   const form = useForm<Inputs>({
@@ -55,15 +56,12 @@ export function EditLectureForm({
     try {
       await updateLecture({
         id: lectureId,
-        data: {
-          ...data,
-          description: data.description || null,
-          video: data.video || null,
-        },
+        data: undefinedToNull(data),
       });
-      push(route.dashboard.self);
+      back();
       form.reset();
     } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Something went wrong",
@@ -152,7 +150,7 @@ export function EditLectureForm({
 
         <Button disabled={isLoading} className="w-full">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Add lecture
+          Update lecture
         </Button>
       </form>
     </Form>
