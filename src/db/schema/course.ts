@@ -2,7 +2,7 @@ import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { denullableObject } from "@/lib/utils";
+import { denullableObject, nullableToOptionalObject } from "@/lib/utils";
 
 export const courses = pgTable("courses", {
   id: text("id").notNull().primaryKey(),
@@ -25,4 +25,5 @@ export type NewCourse = z.infer<typeof insertCourseSchema>;
 export type UpdateCourse = z.infer<typeof updateCourseSchema>;
 
 export const insertCourseFormSchema = denullableObject(insertCourseSchema);
-export const updateCourseFormSchema = denullableObject(updateCourseSchema);
+export const updateCourseFormSchema =
+  nullableToOptionalObject(updateCourseSchema);

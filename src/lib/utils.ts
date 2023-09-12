@@ -14,65 +14,17 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function makeOptionalPropsNullable<Schema extends z.AnyZodObject>(
-  schema: Schema
-) {
-  const entries = Object.entries(schema.shape) as [
-    keyof Schema["shape"],
-    z.ZodTypeAny,
-  ][];
-  const newProps = entries.reduce(
-    (acc, [key, value]) => {
-      acc[key] =
-        value instanceof z.ZodOptional ? value.unwrap().nullable() : value;
-      return acc;
-    },
-    {} as {
-      [key in keyof Schema["shape"]]: Schema["shape"][key] extends z.ZodOptional<
-        infer T
-      >
-        ? z.ZodNullable<T>
-        : Schema["shape"][key];
-    }
-  );
-  return z.object(newProps);
-}
-
-export function makeNullablePropsOptional<Schema extends z.AnyZodObject>(
-  schema: Schema
-) {
-  type SchemaShape = Schema["shape"];
-
-  const entries = Object.entries(schema.shape) as [
-    keyof SchemaShape,
-    z.ZodTypeAny,
-  ][];
-
-  const newProps = entries.reduce(
-    (acc, [key, value]) => {
-      acc[key] =
-        value instanceof z.ZodNullable ? value.unwrap().optional() : value;
-      return acc;
-    },
-    {} as {
-      [key in keyof SchemaShape]: SchemaShape[key] extends z.ZodNullable<
-        infer T
-      >
-        ? z.ZodOptional<T>
-        : SchemaShape[key];
-    }
-  );
-
-  return z.object(newProps);
-}
-
-export type denullable<T extends z.ZodTypeAny> = T extends z.ZodNullable<
+export type denullableType<T extends z.ZodTypeAny> = T extends z.ZodNullable<
   infer U
 >
-  ? denullable<U>
+  ? denullableType<U>
   : T extends z.ZodOptional<infer U>
-  ? z.ZodOptional<denullable<U>>
+  ? z.ZodOptional<denullableType<U>>
   : T;
+
+type denullableObjectType<Schema extends z.AnyZodObject> = {
+  [key in keyof Schema["shape"]]: denullableType<Schema["shape"][key]>;
+};
 
 export function denullableObject<Schema extends z.AnyZodObject>(
   schema: Schema
@@ -84,15 +36,37 @@ export function denullableObject<Schema extends z.AnyZodObject>(
     z.ZodTypeAny,
   ][];
 
-  const newProps = entries.reduce(
-    (acc, [key, value]) => {
-      acc[key] = value instanceof z.ZodNullable ? value.unwrap() : value;
-      return acc;
-    },
-    {} as {
-      [key in keyof SchemaShape]: denullable<SchemaShape[key]>;
-    }
-  );
+  const newProps = entries.reduce((acc, [key, value]) => {
+    acc[key] = value instanceof z.ZodNullable ? value.unwrap() : value;
+    return acc;
+  }, {} as denullableObjectType<Schema>);
+
+  return z.object(newProps);
+}
+
+type nullableToOptionalObjectType<Schema extends z.AnyZodObject> = {
+  [key in keyof Schema["shape"]]: Schema["shape"][key] extends z.ZodNullable<
+    infer U
+  >
+    ? z.ZodOptional<denullableType<U>>
+    : Schema["shape"][key];
+};
+
+export function nullableToOptionalObject<Schema extends z.AnyZodObject>(
+  schema: Schema
+) {
+  type SchemaShape = Schema["shape"];
+
+  const entries = Object.entries(schema.shape) as [
+    keyof SchemaShape,
+    z.ZodTypeAny,
+  ][];
+
+  const newProps = entries.reduce((acc, [key, value]) => {
+    acc[key] =
+      value instanceof z.ZodNullable ? value.unwrap().optional() : value;
+    return acc;
+  }, {} as nullableToOptionalObjectType<Schema>);
 
   return z.object(newProps);
 }
