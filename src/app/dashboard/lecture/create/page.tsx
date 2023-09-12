@@ -1,6 +1,6 @@
-import { CreateLectureForm } from "@components/auth/create-lecture-form"
+import { CreateLectureForm } from "@components/form/create-lecture-form";
 
-import { Heading } from "@ui/heading"
+import { Heading } from "@ui/heading";
 
 export default function CreateLecture() {
   return (
@@ -12,5 +12,5 @@ export default function CreateLecture() {
         <CreateLectureForm />
       </div>
     </main>
-  )
+  );
 }

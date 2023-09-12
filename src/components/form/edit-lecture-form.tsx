@@ -1,14 +1,13 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Icons } from "@components/icons"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useRouter } from "next/navigation";
+import { Icons } from "@components/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { route } from "@/lib/config"
-import { createLectureSchema } from "@/lib/validators/lecture"
-import { Button } from "@ui/button"
+import { route } from "@/lib/config";
+import { Button } from "@ui/button";
 import {
   Form,
   FormControl,
@@ -17,46 +16,61 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ui/form"
-import { Input } from "@ui/input"
+} from "@ui/form";
+import { Input } from "@ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/select"
-import { Textarea } from "@ui/textarea"
-import { useToast } from "@ui/use-toast"
-import { trpc } from "@/app/_trpc/client"
+} from "@ui/select";
+import { Textarea } from "@ui/textarea";
+import { useToast } from "@ui/use-toast";
+import { trpc } from "@/app/_trpc/client";
+import { updateLectureFormSchema } from "@/db/schema/lecture";
 
-type Inputs = z.input<typeof createLectureSchema>
+type Inputs = z.input<typeof updateLectureFormSchema>;
 
-export function CreateLectureForm() {
-  const { toast } = useToast()
-  const { push } = useRouter()
-  const { mutateAsync: createLecture, isLoading } =
-    trpc.lecture.create.useMutation()
+export function EditLectureForm({
+  defaultValues,
+  lectureId,
+}: {
+  defaultValues: Inputs;
+  lectureId: string;
+}) {
+  const { toast } = useToast();
+  const { push } = useRouter();
+  const { mutateAsync: updateLecture, isLoading } =
+    trpc.lecture.update.useMutation();
   const { data: courses, isLoading: coursesLoading } =
-    trpc.course.getAll.useQuery()
+    trpc.course.getAll.useQuery();
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(createLectureSchema),
-  })
+    resolver: zodResolver(updateLectureFormSchema),
+    defaultValues,
+  });
 
   const onSubmit = async (data: Inputs) => {
     try {
-      await createLecture(data)
-      push(route.dashboard.self)
-      form.reset()
+      await updateLecture({
+        id: lectureId,
+        data: {
+          ...data,
+          description: data.description || null,
+          video: data.video || null,
+        },
+      });
+      push(route.dashboard.self);
+      form.reset();
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-      })
-      return
+      });
+      return;
     }
-  }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -116,7 +130,7 @@ export function CreateLectureForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {isLoading && (
+                  {coursesLoading && (
                     <SelectItem disabled value="loading">
                       Loading...
                     </SelectItem>
@@ -142,5 +156,5 @@ export function CreateLectureForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

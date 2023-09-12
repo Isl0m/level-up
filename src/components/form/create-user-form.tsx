@@ -1,15 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { route } from "@/lib/config"
-import { createUserSchema } from "@/lib/validators/auth"
-import { Button } from "@ui/button"
+import { route } from "@/lib/config";
+import { createUserSchema } from "@/lib/validators/auth";
+import { Button } from "@ui/button";
 import {
   Form,
   FormControl,
@@ -17,42 +16,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ui/form"
-import { Input } from "@ui/input"
-import { useToast } from "@ui/use-toast"
-import { trpc } from "@/app/_trpc/client"
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { useToast } from "@ui/use-toast";
+import { trpc } from "@/app/_trpc/client";
 
-import { Icons } from "../icons"
+import { Icons } from "../icons";
 
-type Inputs = z.infer<typeof createUserSchema>
+type Inputs = z.infer<typeof createUserSchema>;
 
 export function CreateUserForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
-  const { push } = useRouter()
-  const mutate = trpc.user.create.useMutation()
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const { push } = useRouter();
+  const mutate = trpc.user.create.useMutation();
 
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(createUserSchema),
-  })
+  });
 
   const onSubmit = async (data: Inputs) => {
     try {
-      setIsLoading(true)
-      await mutate.mutateAsync(data)
-      push(route.dashboard.self)
-      setIsLoading(false)
-      form.reset()
+      setIsLoading(true);
+      await mutate.mutateAsync(data);
+      push(route.dashboard.self);
+      setIsLoading(false);
+      form.reset();
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-      })
-      setIsLoading(false)
-      return
+      });
+      setIsLoading(false);
+      return;
     }
-  }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -101,5 +100,5 @@ export function CreateUserForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

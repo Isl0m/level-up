@@ -10,7 +10,9 @@ export const userRouter = router({
   getAll: publicProcedure.query(async () => await getUsers()),
   create: publicProcedure
     .input(
-      insertUserSchema.omit({ password: true }).extend({ password: z.string() })
+      insertUserSchema
+        .omit({ password: true, id: true })
+        .extend({ password: z.string() })
     )
     .mutation(async ({ input }) => await createUserWithPassword(input)),
   update: protectedProcedure

@@ -1,6 +1,6 @@
-import { CreateUserForm } from "@components/auth/create-user-form"
+import { CreateUserForm } from "@components/form/create-user-form";
 
-import { Heading } from "@ui/heading"
+import { Heading } from "@ui/heading";
 
 export default function CreateUser() {
   return (
@@ -12,5 +12,5 @@ export default function CreateUser() {
         <CreateUserForm />
       </div>
     </main>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { CreateCourseForm } from "@components/auth/create-course-form"
+import { CreateCourseForm } from "@components/form/create-course-form";
 
-import { Heading } from "@ui/heading"
+import { Heading } from "@ui/heading";
 
 export default function CreateCourse() {
   return (
@@ -12,5 +12,5 @@ export default function CreateCourse() {
         <CreateCourseForm />
       </div>
     </main>
-  )
+  );
 }
