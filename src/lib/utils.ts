@@ -14,6 +14,10 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+export type SearchParamsProps = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 export type denullableType<T extends z.ZodTypeAny> = T extends z.ZodNullable<
   infer U
 >

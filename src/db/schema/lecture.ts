@@ -18,7 +18,7 @@ export const lectures = pgTable("lectures", {
 });
 
 export const selectLectureSchema = createSelectSchema(lectures, {
-  duration: z.number().nullable(),
+  duration: z.number().nullable().optional(),
 });
 export const insertLectureSchema = createInsertSchema(lectures, {
   duration: z.number().nullable(),
