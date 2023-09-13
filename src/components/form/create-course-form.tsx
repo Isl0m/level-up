@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { route } from "@/lib/config";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -20,9 +19,12 @@ import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
 import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
-import { insertCourseFormSchema } from "@/db/schema/course";
+import { insertCourseSchema } from "@/db/schema/course";
 
-type Inputs = z.input<typeof insertCourseFormSchema>;
+import { getFormInputsSchema } from "./helpers";
+
+const inputSchema = getFormInputsSchema(insertCourseSchema);
+type Inputs = z.input<typeof inputSchema>;
 
 export function CreateCourseForm() {
   const { toast } = useToast();
@@ -32,7 +34,7 @@ export function CreateCourseForm() {
 
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(insertCourseFormSchema),
+    resolver: zodResolver(inputSchema),
   });
 
   const onSubmit = async (data: Inputs) => {

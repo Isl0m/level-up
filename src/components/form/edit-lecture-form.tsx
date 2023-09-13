@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FormState, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { undefinedToNull } from "@/lib/utils";
+import { isKey } from "@/lib/utils";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -28,9 +28,12 @@ import {
 import { Textarea } from "@ui/textarea";
 import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
-import { updateLectureFormSchema } from "@/db/schema/lecture";
+import { updateLectureSchema } from "@/db/schema/lecture";
 
-type Inputs = z.input<typeof updateLectureFormSchema>;
+import { getFormInputsSchema } from "./helpers";
+
+const inputSchema = getFormInputsSchema(updateLectureSchema);
+type Inputs = z.input<typeof inputSchema>;
 
 export function EditLectureForm({
   defaultValues,
@@ -48,26 +51,55 @@ export function EditLectureForm({
     trpc.course.getAll.useQuery();
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(updateLectureFormSchema),
+    resolver: zodResolver(inputSchema),
     defaultValues,
   });
 
+  const getDirtyFields = <T extends object>(
+    data: T,
+    formState: FormState<T>
+  ) => {
+    const defaultValues = formState.defaultValues;
+
+    const dirtyFields: Record<string, unknown> = {};
+
+    Object.keys(formState.dirtyFields).map((key) => {
+      if (isKey(data, key)) {
+        const value = data[key];
+        if (
+          defaultValues &&
+          isKey(defaultValues, key) &&
+          value === defaultValues[key]
+        ) {
+          return;
+        }
+        if (value) {
+          dirtyFields[key] = value;
+        }
+      }
+    });
+
+    return dirtyFields;
+  };
+
   const onSubmit = async (data: Inputs) => {
-    try {
-      await updateLecture({
-        id: lectureId,
-        data: undefinedToNull(data),
-      });
-      back();
-      form.reset();
-    } catch (error) {
-      console.log(error);
-      toast({
-        variant: "destructive",
-        title: "Something went wrong",
-      });
-      return;
-    }
+    if (!form.formState.isDirty) return;
+    console.log(getDirtyFields(data, form.formState));
+    // try {
+    //   await updateLecture({
+    //     id: lectureId,
+    //     data: undefinedToNull(data),
+    //   });
+    //   back();
+    //   form.reset();
+    // } catch (error) {
+    //   console.log(error);
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Something went wrong",
+    //   });
+    //   return;
+    // }
   };
   return (
     <Form {...form}>

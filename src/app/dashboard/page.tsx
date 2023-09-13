@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { capitalize, SearchParamsProps, undefinedToNull } from "@/lib/utils";
+import { SearchParamsProps } from "@/lib/utils";
 import { Heading } from "@ui/heading";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/tabs";
+import { Tabs, TabsContent } from "@ui/tabs";
 
 import { AnalyticsCards } from "./_components/analytics/card";
 import { CourseTable } from "./_components/course-table/course-table";

@@ -27,9 +27,12 @@ import {
 import { Textarea } from "@ui/textarea";
 import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
-import { insertLectureFormSchema } from "@/db/schema/lecture";
+import { insertLectureSchema } from "@/db/schema/lecture";
 
-type Inputs = z.input<typeof insertLectureFormSchema>;
+import { getFormInputsSchema } from "./helpers";
+
+const inputSchema = getFormInputsSchema(insertLectureSchema);
+type Inputs = z.input<typeof inputSchema>;
 
 export function CreateLectureForm() {
   const { toast } = useToast();
@@ -40,7 +43,7 @@ export function CreateLectureForm() {
     trpc.course.getAll.useQuery();
   const form = useForm<Inputs>({
     mode: "onChange",
-    resolver: zodResolver(insertLectureFormSchema),
+    resolver: zodResolver(inputSchema),
   });
 
   const onSubmit = async (data: Inputs) => {

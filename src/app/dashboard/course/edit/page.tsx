@@ -4,7 +4,7 @@ import { EditCourseForm } from "@components/form/edit-course-form";
 
 import { getCourseById } from "@/lib/api/course/queries";
 import { route } from "@/lib/config";
-import { nullToUndefined, Prettify } from "@/lib/utils";
+import { nullToUndefined } from "@/lib/utils";
 import { Heading } from "@ui/heading";
 import { selectCourseSchema } from "@/db/schema/course";
 
