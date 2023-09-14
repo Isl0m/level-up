@@ -2,8 +2,7 @@ import { integer, pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { toOptional } from "@/lib/helpers";
-
+import { toOptional } from "../../lib/helpers";
 import { courses } from "./course";
 
 export const lectures = pgTable("lectures", {
@@ -11,7 +10,7 @@ export const lectures = pgTable("lectures", {
   title: text("title").notNull(),
   description: text("description"),
   video: text("video"),
-  order: integer("order").default(0),
+  order: integer("order").default(1),
   duration: integer("duration"),
   courseId: text("courseId")
     .notNull()

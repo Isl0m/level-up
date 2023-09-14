@@ -2,7 +2,7 @@ import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { toOptional } from "@/lib/helpers";
+import { toOptional } from "../../lib/helpers";
 
 export const courses = pgTable("courses", {
   id: text("id").notNull().primaryKey(),

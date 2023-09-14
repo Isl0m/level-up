@@ -26,12 +26,18 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Name" />;
+      return <DataTableColumnHeader column={column} title="Title" />;
     },
   },
   {
+    id: "course",
     header: "Course",
     cell: ({ row }) => row.original.course?.title || "Null",
+    filterFn: (row, columnId, filterValue) => {
+      if (Array.isArray(filterValue))
+        return filterValue.includes(row.original.course?.id);
+      return row.original.course?.id === filterValue;
+    },
   },
   {
     id: "actions",

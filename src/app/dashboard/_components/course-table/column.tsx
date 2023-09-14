@@ -21,7 +21,7 @@ export const columns = (refetch: unknown): ColumnDef<Course>[] => [
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="title" />;
+      return <DataTableColumnHeader column={column} title="Title" />;
     },
   },
   {
