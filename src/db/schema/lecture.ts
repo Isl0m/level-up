@@ -11,18 +11,15 @@ export const lectures = pgTable("lectures", {
   title: text("title").notNull(),
   description: text("description"),
   video: text("video"),
+  order: integer("order").default(0),
   duration: integer("duration"),
   courseId: text("courseId")
     .notNull()
     .references(() => courses.id, { onDelete: "cascade" }),
 });
 
-export const selectLectureSchema = createSelectSchema(lectures, {
-  duration: z.number(),
-});
-export const insertLectureSchema = createInsertSchema(lectures, {
-  duration: z.number(),
-});
+export const selectLectureSchema = createSelectSchema(lectures);
+export const insertLectureSchema = createInsertSchema(lectures);
 export const updateLectureSchema = toOptional(selectLectureSchema);
 
 export type Lecture = z.infer<typeof selectLectureSchema>;

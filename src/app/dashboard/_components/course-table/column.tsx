@@ -1,19 +1,17 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Course } from "@/db/schema"
+import { Course } from "@/db/schema/course";
 
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
 
-type Column = Omit<Course, "createdAt"> & { createdAt: string | null }
-
-export const columns = (refetch: unknown): ColumnDef<Column>[] => [
+export const columns = (refetch: unknown): ColumnDef<Course>[] => [
   {
     header: "#",
     cell: ({ row }) => {
-      return row.index + 1
+      return row.index + 1;
     },
   },
   {
@@ -21,27 +19,27 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
     header: "ID",
   },
   {
-    accessorKey: "name",
+    accessorKey: "title",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Name" />
+      return <DataTableColumnHeader column={column} title="title" />;
     },
   },
   {
     accessorKey: "slug",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Slug" />
+      return <DataTableColumnHeader column={column} title="Slug" />;
     },
   },
   {
-    header: "Rating",
-    cell: ({ row }) => row.original.rating || "Null",
+    header: "Duration",
+    cell: ({ row }) => row.original.duration || "Null",
   },
   {
     header: "Price",
     cell: ({ row }) => {
-      const price = row.original.price
-      if (!price) return "Null"
-      return Intl.NumberFormat().format(price) // navigator.language
+      const price = row.original.price;
+      if (!price) return "Null";
+      return Intl.NumberFormat().format(price); // navigator.language
     },
   },
   {
@@ -50,4 +48,4 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
       <DataTableRowActions id={row.original.id} row={row} refetch={refetch} />
     ),
   },
-]
+];

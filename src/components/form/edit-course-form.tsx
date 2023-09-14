@@ -89,12 +89,12 @@ export function EditCourseForm({
         />
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your name..." {...field} />
+                <Input placeholder="Enter course title..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

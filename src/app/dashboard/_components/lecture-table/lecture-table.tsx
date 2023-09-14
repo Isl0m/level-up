@@ -13,8 +13,7 @@ import { DataTable } from "./data-table";
 export function LectureTable() {
   const { data, refetch } = trpc.lecture.getAllWithCourse.useQuery();
   const { data: coursesCount, isSuccess } = trpc.course.getCount.useQuery();
-
-  if (isSuccess && coursesCount === undefined) return <AddCourses />;
+  if (isSuccess && coursesCount < 1) return <AddCourses />;
 
   if (data) return <DataTable data={data} columns={columns(refetch)} />;
   else return <p>Loading...</p>;

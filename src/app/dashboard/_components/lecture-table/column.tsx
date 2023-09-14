@@ -31,7 +31,7 @@ export const columns = (refetch: unknown): ColumnDef<Column>[] => [
   },
   {
     header: "Course",
-    cell: ({ row }) => row.original.course?.name || "Null",
+    cell: ({ row }) => row.original.course?.title || "Null",
   },
   {
     id: "actions",

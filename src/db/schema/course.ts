@@ -7,25 +7,16 @@ import { toOptional } from "@/lib/helpers";
 export const courses = pgTable("courses", {
   id: text("id").notNull().primaryKey(),
   slug: text("slug").notNull().unique(),
-  name: text("name").notNull(),
+  title: text("title").notNull(),
   description: text("description"),
-  rating: integer("rating"),
-  reviews: integer("reviews"),
   price: integer("price"),
+  duration: text("duration"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
-export const insertCourseSchema = createInsertSchema(courses, {
-  rating: z.number(),
-  reviews: z.number(),
-  price: z.number(),
-});
-export const selectCourseSchema = createSelectSchema(courses, {
-  rating: z.number(),
-  reviews: z.number(),
-  price: z.number(),
-});
+export const insertCourseSchema = createInsertSchema(courses);
+export const selectCourseSchema = createSelectSchema(courses);
 export const updateCourseSchema = toOptional(selectCourseSchema);
 
 export type Course = z.infer<typeof selectCourseSchema>;

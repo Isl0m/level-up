@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { generateFakeLecture } from "@/lib/mock";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -44,6 +45,7 @@ export function CreateLectureForm() {
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(inputSchema),
+    defaultValues: generateFakeLecture(),
   });
 
   const onSubmit = async (data: Inputs) => {
@@ -107,6 +109,23 @@ export function CreateLectureForm() {
         />
         <FormField
           control={form.control}
+          name="order"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Order</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter lecture order..."
+                  type="number"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="courseId"
           render={({ field }) => (
             <FormItem>
@@ -125,7 +144,7 @@ export function CreateLectureForm() {
                   )}
                   {courses?.map((course) => (
                     <SelectItem key={course.id} value={course.id}>
-                      {course.name}
+                      {course.title}
                     </SelectItem>
                   ))}
                 </SelectContent>

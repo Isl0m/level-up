@@ -5,7 +5,7 @@ import { Course, courses } from "@/db/schema/course";
 
 export function getCoursesCount(): Promise<number> {
   return db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
     .from(courses)
     .then((res) => res[0].count);
 }

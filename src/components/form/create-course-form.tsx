@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { generateFakeCourse } from "@/lib/mock";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -35,6 +36,7 @@ export function CreateCourseForm() {
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(inputSchema),
+    defaultValues: generateFakeCourse(),
   });
 
   const onSubmit = async (data: Inputs) => {
@@ -68,12 +70,12 @@ export function CreateCourseForm() {
         />
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your name..." {...field} />
+                <Input placeholder="Enter course title..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
