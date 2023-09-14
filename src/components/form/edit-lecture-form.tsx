@@ -3,10 +3,9 @@
 import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormState, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { isKey } from "@/lib/utils";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -30,9 +29,9 @@ import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { updateLectureSchema } from "@/db/schema/lecture";
 
-import { getFormInputsSchema } from "./helpers";
+import { getDirtyFields } from "./helpers";
 
-const inputSchema = getFormInputsSchema(updateLectureSchema);
+const inputSchema = updateLectureSchema;
 type Inputs = z.input<typeof inputSchema>;
 
 export function EditLectureForm({
@@ -55,51 +54,34 @@ export function EditLectureForm({
     defaultValues,
   });
 
-  const getDirtyFields = <T extends object>(
-    data: T,
-    formState: FormState<T>
-  ) => {
-    const defaultValues = formState.defaultValues;
-
-    const dirtyFields: Record<string, unknown> = {};
-
-    Object.keys(formState.dirtyFields).map((key) => {
-      if (isKey(data, key)) {
-        const value = data[key];
-        if (
-          defaultValues &&
-          isKey(defaultValues, key) &&
-          value === defaultValues[key]
-        ) {
-          return;
-        }
-        if (value) {
-          dirtyFields[key] = value;
-        }
-      }
-    });
-
-    return dirtyFields;
-  };
-
   const onSubmit = async (data: Inputs) => {
-    if (!form.formState.isDirty) return;
-    console.log(getDirtyFields(data, form.formState));
-    // try {
-    //   await updateLecture({
-    //     id: lectureId,
-    //     data: undefinedToNull(data),
-    //   });
-    //   back();
-    //   form.reset();
-    // } catch (error) {
-    //   console.log(error);
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Something went wrong",
-    //   });
-    //   return;
-    // }
+    // TODO: Problems with next js caching
+    if (
+      !form.formState.isDirty &&
+      !Object.keys(form.formState.dirtyFields).length
+    ) {
+      toast({
+        variant: "default",
+        title: "No one field was changed",
+      });
+      return;
+    }
+    try {
+      const dirtyFields = getDirtyFields(data, form.formState);
+      await updateLecture({
+        id: lectureId,
+        data: dirtyFields,
+      });
+      back();
+      form.reset();
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+      });
+      return;
+    }
   };
   return (
     <Form {...form}>
@@ -153,18 +135,17 @@ export function EditLectureForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Course</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                disabled={coursesLoading}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select course" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {coursesLoading && (
-                    <SelectItem disabled value="loading">
-                      Loading...
-                    </SelectItem>
-                  )}
                   {courses?.map((course) => (
                     <SelectItem key={course.id} value={course.id}>
                       {course.name}

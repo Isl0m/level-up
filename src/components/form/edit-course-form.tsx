@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { undefinedToNull } from "@/lib/utils";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -22,9 +21,9 @@ import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { updateCourseSchema } from "@/db/schema/course";
 
-import { getFormInputsSchema } from "./helpers";
+import { getDirtyFields } from "./helpers";
 
-const inputSchema = getFormInputsSchema(updateCourseSchema);
+const inputSchema = updateCourseSchema;
 type Inputs = z.input<typeof inputSchema>;
 
 export function EditCourseForm({
@@ -46,10 +45,21 @@ export function EditCourseForm({
   });
 
   const onSubmit = async (data: Inputs) => {
+    if (
+      !form.formState.isDirty &&
+      !Object.keys(form.formState.dirtyFields).length
+    ) {
+      toast({
+        variant: "default",
+        title: "No one field was changed",
+      });
+      return;
+    }
     try {
+      const dirtyFields = getDirtyFields(data, form.formState);
       await updateCourse({
         id: courseId,
-        data: undefinedToNull(data),
+        data: dirtyFields,
       });
       back();
       form.reset();

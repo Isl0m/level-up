@@ -32,6 +32,12 @@ type denullableObjectType<Schema extends z.AnyZodObject> = {
   [key in keyof Schema["shape"]]: denullableType<Schema["shape"][key]>;
 };
 
+type RequiredObjectType<Schema extends z.AnyZodObject> = {
+  [key in keyof Schema["shape"]]: z.ZodOptional<
+    ZodRequired<Schema["shape"][key]>
+  >;
+};
+
 export function zodRequired<T extends z.ZodTypeAny>(value: T) {
   if (value instanceof z.ZodNullable && value instanceof z.ZodOptional) {
     return zodRequired(value.unwrap());
@@ -51,9 +57,29 @@ export function nullableToOptional<Schema extends z.AnyZodObject>(
   ][];
 
   const newProps = entries.reduce((acc, [key, value]) => {
-    acc[key] = zodRequired(value).optional() as any;
+    if (value instanceof z.ZodOptional && value instanceof z.ZodNullable) {
+      acc[key] = zodRequired(value).optional() as any;
+    } else {
+      acc[key] = value as any;
+    }
     return acc;
   }, {} as NullableToOptionalObject<Schema>);
+
+  return z.object(newProps);
+}
+
+export function toOptional<Schema extends z.AnyZodObject>(schema: Schema) {
+  type SchemaShape = Schema["shape"];
+
+  const entries = Object.entries(schema.shape) as [
+    keyof SchemaShape,
+    z.ZodTypeAny,
+  ][];
+
+  const newProps = entries.reduce((acc, [key, value]) => {
+    acc[key] = zodRequired(value).optional() as any;
+    return acc;
+  }, {} as RequiredObjectType<Schema>);
 
   return z.object(newProps);
 }
