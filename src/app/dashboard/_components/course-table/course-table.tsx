@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { trpc } from "@/app/_trpc/client"
+import { trpc } from "@/app/_trpc/client";
 
-import { columns } from "./column"
-import { DataTable } from "./data-table"
+import { columns } from "./column";
+import { DataTable } from "./data-table";
 
 export function CourseTable() {
-  const { data, refetch } = trpc.course.getAll.useQuery()
+  const { data, refetch } = trpc.course.getAll.useQuery();
 
-  if (data) return <DataTable data={data} columns={columns(refetch)} />
-  else return <p>Loading...</p>
+  if (data) return <DataTable data={data} columns={columns(refetch)} />;
+  else return <p>Loading...</p>;
 }

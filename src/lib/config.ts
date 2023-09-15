@@ -1,3 +1,3 @@
-import routes from "@/routes.json"
+import routes from "@/routes.json";
 
-export const route = routes
+export const route = routes;

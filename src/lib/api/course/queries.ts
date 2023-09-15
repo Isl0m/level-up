@@ -27,3 +27,11 @@ export function getCourseById(id: string): Promise<Course | null> {
     .where(eq(courses.id, id))
     .then((res) => res[0] ?? null);
 }
+
+export function getCourseBySlug(slug: string): Promise<Course | null> {
+  return db
+    .select()
+    .from(courses)
+    .where(eq(courses.slug, slug))
+    .then((res) => res[0] ?? null);
+}

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { ThemeToggle } from "@components/theme-toggle"
+import { ThemeToggle } from "@components/theme-toggle";
 
-import { HeaderAuth } from "./header-auth"
+import { HeaderAuth } from "./header-auth";
 
 export const HeaderActins = () => {
   return (
@@ -10,5 +10,5 @@ export const HeaderActins = () => {
       <HeaderAuth />
       <ThemeToggle />
     </div>
-  )
-}
+  );
+};

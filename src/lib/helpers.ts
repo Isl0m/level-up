@@ -37,7 +37,7 @@ type RequiredObjectType<Schema extends z.AnyZodObject> = {
     ZodRequired<Schema["shape"][key]>
   >;
 };
-
+// @ts-ignore
 export function zodRequired<T extends z.ZodTypeAny>(value: T) {
   if (value instanceof z.ZodNullable && value instanceof z.ZodOptional) {
     return zodRequired(value.unwrap());

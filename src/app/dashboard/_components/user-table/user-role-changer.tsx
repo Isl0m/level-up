@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Check } from "lucide-react"
+import { useState } from "react";
+import { Check } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@ui/button"
-import { Command, CommandGroup, CommandItem } from "@ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover"
-import { trpc } from "@/app/_trpc/client"
-import { UserRole } from "@/db/schema"
+import { cn } from "@/lib/utils";
+import { Button } from "@ui/button";
+import { Command, CommandGroup, CommandItem } from "@ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
+import { trpc } from "@/app/_trpc/client";
+import { UserRole } from "@/db/schema/user";
 
 const roles: Record<UserRole, string> = {
   admin: "Admin",
   user: "User",
-}
+};
 
 type Props = {
-  userId: string
-  role: UserRole
-}
+  userId: string;
+  role: UserRole;
+};
 
 export function UserRoleChanger({ userId, role: defaultRole }: Props) {
-  const [role, setRole] = useState(defaultRole)
-  const [open, setOpen] = useState(false)
-  const { mutateAsync: updateUser, isError } = trpc.user.update.useMutation()
+  const [role, setRole] = useState(defaultRole);
+  const [open, setOpen] = useState(false);
+  const { mutateAsync: updateUser, isError } = trpc.user.update.useMutation();
 
   const handleChangeRole = async (selectedRole: UserRole) => {
-    if (selectedRole === role) return
+    if (selectedRole === role) return;
 
-    const data = { role: selectedRole }
-    await updateUser({ data, id: userId })
+    const data = { role: selectedRole };
+    await updateUser({ data, id: userId });
     if (!isError) {
-      setRole(selectedRole)
+      setRole(selectedRole);
     }
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -64,5 +64,5 @@ export function UserRoleChanger({ userId, role: defaultRole }: Props) {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

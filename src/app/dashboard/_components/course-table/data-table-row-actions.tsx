@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Row } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { useRouter } from "next/navigation";
+import { Row } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
 
-import { route } from "@/lib/config"
-import { Button } from "@ui/button"
+import { route } from "@/lib/config";
+import { Button } from "@ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu"
-import { trpc } from "@/app/_trpc/client"
+} from "@ui/dropdown-menu";
+import { trpc } from "@/app/_trpc/client";
 
 interface DataTableRowActionsProps<TData> {
-  row: Row<TData>
-  id: string
-  refetch: unknown
+  row: Row<TData>;
+  id: string;
+  refetch: unknown;
 }
 
 export function DataTableRowActions<TData>({
@@ -27,22 +27,22 @@ export function DataTableRowActions<TData>({
   id,
   refetch,
 }: DataTableRowActionsProps<TData>) {
-  const router = useRouter()
-  const { mutateAsync: deleteCourse } = trpc.course.delete.useMutation()
+  const router = useRouter();
+  const { mutateAsync: deleteCourse } = trpc.course.delete.useMutation();
 
   const handleDeleteItem = async () => {
-    const isYes = confirm("Do you really want to delete")
+    const isYes = confirm("Do you really want to delete");
     if (isYes) {
-      await deleteCourse({ id })
+      await deleteCourse({ id });
 
       if (typeof refetch === "function") {
-        refetch()
+        refetch();
       }
     }
-  }
+  };
   const handleEditItem = () => {
-    router.push(route.dashboard.course.edit + `?id=${id}`)
-  }
+    router.push(route.dashboard.course.edit + `?id=${id}`);
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -63,5 +63,5 @@ export function DataTableRowActions<TData>({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

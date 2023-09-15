@@ -1,6 +1,6 @@
-import { route } from "@/lib/config"
+import { route } from "@/lib/config";
 
-import { HeaderActins } from "./header-actions"
+import { HeaderActins } from "./header-actions";
 
 export function Header() {
   return (
@@ -12,5 +12,5 @@ export function Header() {
         <HeaderActins />
       </div>
     </header>
-  )
+  );
 }

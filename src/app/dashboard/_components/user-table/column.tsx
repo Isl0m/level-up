@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { User } from "@/db/schema";
+import { User } from "@/db/schema/user";
 
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { UserRoleChanger } from "./user-role-changer";

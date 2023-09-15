@@ -1,10 +1,10 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const authMethodSchema = z.enum(["signin", "signup"])
+export const authMethodSchema = z.enum(["signin", "signup"]);
 
 const emailSchema = z
   .string()
-  .email({ message: "Please enter a valid email address" })
+  .email({ message: "Please enter a valid email address" });
 
 const passwordSchema = z
   .string()
@@ -12,21 +12,21 @@ const passwordSchema = z
   .max(100)
   .regex(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{6,})/, {
     message: "Password must contain at least 6 characters and one number",
-  })
+  });
 
 const nameSchema = z
   .string()
-  .min(2, { message: "Name must be at least 2 characters." })
+  .min(2, { message: "Name must be at least 2 characters." });
 
 export const signInSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-})
+});
 
 export const signUpSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   name: nameSchema,
-})
+});
 
-export const createUserSchema = signUpSchema
+export const createUserSchema = signUpSchema;

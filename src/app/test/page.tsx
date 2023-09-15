@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import Markdown from "markdown-to-jsx"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Markdown from "markdown-to-jsx";
 
-import { Heading } from "@ui/heading"
-import { Textarea } from "@ui/textarea"
+import { Heading } from "@ui/heading";
+import { Textarea } from "@ui/textarea";
 
 export default function MarkdownEditor() {
-  const [markdown, setMarkdown] = useState("")
+  const [markdown, setMarkdown] = useState("");
   return (
     <main className="container flex gap-4 py-8">
       <section>
@@ -41,5 +41,5 @@ export default function MarkdownEditor() {
         </Markdown>
       </section>
     </main>
-  )
+  );
 }

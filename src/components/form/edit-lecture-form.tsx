@@ -148,7 +148,7 @@ export function EditLectureForm({
                 <SelectContent>
                   {courses?.map((course) => (
                     <SelectItem key={course.id} value={course.id}>
-                      {course.name}
+                      {course.title}
                     </SelectItem>
                   ))}
                 </SelectContent>

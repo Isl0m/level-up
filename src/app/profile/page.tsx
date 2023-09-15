@@ -1,15 +1,15 @@
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 
-import { getUserAuth } from "@/lib/auth"
-import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar"
-import { Heading } from "@ui/heading"
+import { getUserAuth } from "@/lib/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { Heading } from "@ui/heading";
 
 export default async function Profile() {
-  const { session } = await getUserAuth()
+  const { session } = await getUserAuth();
   if (!session) {
-    redirect("/home")
+    redirect("/home");
   }
-  const { user } = session
+  const { user } = session;
 
   return (
     <main className="container py-8">
@@ -27,5 +27,5 @@ export default async function Profile() {
         </div>
       </div>
     </main>
-  )
+  );
 }

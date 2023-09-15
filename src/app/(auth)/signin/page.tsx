@@ -1,10 +1,10 @@
-import Link from "next/link"
-import { OAuthSignIn } from "@components/auth/oauth-signin"
-import { SignInForm } from "@components/auth/signin-form"
+import Link from "next/link";
+import { OAuthSignIn } from "@components/auth/oauth-signin";
+import { SignInForm } from "@components/auth/signin-form";
 
-import { route } from "@/lib/config"
-import { Button } from "@ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card"
+import { route } from "@/lib/config";
+import { Button } from "@ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
 
 export default function SignIn() {
   return (
@@ -40,5 +40,5 @@ export default function SignIn() {
         </CardFooter>
       </Card>
     </main>
-  )
+  );
 }

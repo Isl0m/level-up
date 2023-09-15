@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Table } from "@tanstack/react-table"
-import { PlusCircle, RefreshCcw } from "lucide-react"
+import Link from "next/link";
+import { Table } from "@tanstack/react-table";
+import { PlusCircle, RefreshCcw } from "lucide-react";
 
-import { route } from "@/lib/config"
-import { Button } from "@ui/button"
-import { Input } from "@ui/input"
+import { route } from "@/lib/config";
+import { Button } from "@ui/button";
+import { Input } from "@ui/input";
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>
-  refetch: () => void
+  table: Table<TData>;
+  refetch: () => void;
 }
 
 export function DataTableToolbar<TData>({
@@ -40,5 +40,5 @@ export function DataTableToolbar<TData>({
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -6,14 +6,14 @@ import { insertUserSchema, updateUserSchema } from "@/db/schema/user";
 
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
+const createUserSchema = insertUserSchema
+  .omit({ password: true, id: true })
+  .extend({ password: z.string() });
+
 export const userRouter = router({
   getAll: publicProcedure.query(async () => await getUsers()),
   create: publicProcedure
-    .input(
-      insertUserSchema
-        .omit({ password: true, id: true })
-        .extend({ password: z.string() })
-    )
+    .input(createUserSchema)
     .mutation(async ({ input }) => await createUserWithPassword(input)),
   update: protectedProcedure
     .input(z.object({ id: z.string().optional(), data: updateUserSchema }))

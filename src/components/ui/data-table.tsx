@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
   flexRender,
   Table as TableType,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { Button } from "./button"
+import { Button } from "./button";
 import {
   Table,
   TableBody,
@@ -14,12 +14,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./table"
+} from "./table";
 
 type DataTableProps<TData, TValue> = {
-  table: TableType<TData>
-  columns: ColumnDef<TData, TValue>[]
-}
+  table: TableType<TData>;
+  columns: ColumnDef<TData, TValue>[];
+};
 
 export function DataTableContent<TData, TValue>({
   table,
@@ -41,7 +41,7 @@ export function DataTableContent<TData, TValue>({
                           header.getContext()
                         )}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -70,12 +70,12 @@ export function DataTableContent<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
 
 type DataTablePagination<TData> = {
-  table: TableType<TData>
-}
+  table: TableType<TData>;
+};
 
 export function DataTablePagination<TData>({
   table,
@@ -99,5 +99,5 @@ export function DataTablePagination<TData>({
         Next
       </Button>
     </div>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { signIn } from "next-auth/react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { signInSchema } from "@/lib/validators/auth"
-import { Button } from "@ui/button"
+import { signInSchema } from "@/lib/validators/auth";
+import { Button } from "@ui/button";
 import {
   Form,
   FormControl,
@@ -16,18 +16,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ui/form"
-import { Input } from "@ui/input"
-import { useToast } from "@ui/use-toast"
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { useToast } from "@ui/use-toast";
 
-import { Icons } from "../icons"
+import { Icons } from "../icons";
 
-type Inputs = z.infer<typeof signInSchema>
+type Inputs = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<Inputs>({
     mode: "onChange",
@@ -36,27 +36,27 @@ export function SignInForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   const onSubmit = async (values: Inputs) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const result = await signIn("credentials", {
       ...values,
       method: "signin",
       redirect: false,
-    })
+    });
     if (result?.error) {
       toast({
         variant: "destructive",
         title: result.error,
-      })
-      setIsLoading(false)
-      return
+      });
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false)
-    router.back()
-    form.reset()
-  }
+    setIsLoading(false);
+    router.back();
+    form.reset();
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -92,5 +92,5 @@ export function SignInForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

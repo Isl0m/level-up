@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { LogOut } from "lucide-react"
-import { signOut, useSession } from "next-auth/react"
+import Link from "next/link";
+import { LogOut } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
-import { route } from "@/lib/config"
-import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar"
-import { Button } from "@ui/button"
+import { route } from "@/lib/config";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { Button } from "@ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu"
+} from "@ui/dropdown-menu";
 
 export function HeaderAuth() {
-  const { status, data } = useSession()
+  const { status, data } = useSession();
   return status === "authenticated" ? (
     <DropdownAvatar
       imageSrc={data.user.image || undefined}
@@ -24,15 +24,15 @@ export function HeaderAuth() {
     />
   ) : (
     <SignIn />
-  )
+  );
 }
 
 function DropdownAvatar({
   imageSrc,
   fallbackText,
 }: {
-  imageSrc?: string
-  fallbackText?: string
+  imageSrc?: string;
+  fallbackText?: string;
 }) {
   return (
     <DropdownMenu>
@@ -54,7 +54,7 @@ function DropdownAvatar({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function SignIn() {
@@ -62,7 +62,7 @@ function SignIn() {
     <Button asChild variant={"link"}>
       <Link href={route.signin}>Sign in</Link>
     </Button>
-  )
+  );
 }
 
 function SignOut() {
@@ -75,5 +75,5 @@ function SignOut() {
     >
       Sign Out <LogOut className="ml-2 h-4 w-4" />
     </Button>
-  )
+  );
 }

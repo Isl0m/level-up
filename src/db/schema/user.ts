@@ -2,6 +2,8 @@ import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import { toOptional } from "@/lib/helpers";
+
 export const roleEnum = pgEnum("role", ["user", "admin"]);
 
 export const users = pgTable("users", {
@@ -18,7 +20,7 @@ export const users = pgTable("users", {
 
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
-export const updateUserSchema = selectUserSchema;
+export const updateUserSchema = toOptional(selectUserSchema);
 
 export type User = z.infer<typeof selectUserSchema>;
 export type UserRole = User["role"];
