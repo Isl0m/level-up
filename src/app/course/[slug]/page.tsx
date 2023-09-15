@@ -5,6 +5,8 @@ import { getCourseBySlug } from "@/lib/api/course/queries";
 import { route } from "@/lib/config";
 import { Heading } from "@ui/heading";
 
+import { GetCourse } from "./get-course";
+
 export default async function Course({ params }: { params: { slug: string } }) {
   const course = await getCourseBySlug(params.slug);
 
@@ -26,7 +28,10 @@ export default async function Course({ params }: { params: { slug: string } }) {
           />
         )}
       </div>
-      <p className="mt-4 text-gray-600">${course.price}</p>
+      <div className="flex items-center gap-4">
+        <span className="text-gray-600">${course.price}</span>
+        <GetCourse courseId={course.id} />
+      </div>
     </main>
   );
 }
