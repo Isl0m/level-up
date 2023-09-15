@@ -1,11 +1,16 @@
 import "./globals.css";
 
+import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
-import { ClientProviders } from "@components/providers";
+import ClientProviders from "@components/providers";
 
 import { Toaster } from "@ui/toaster";
 import { Header } from "@/components/layout/header";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+
+const ThemeProvider = dynamic(() => import("@components/theme-provider"), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +28,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ClientProviders>
-          <Header />
-          {children}
+          <ThemeProvider>
+            <Header />
+            {children}
+          </ThemeProvider>
         </ClientProviders>
         <Toaster />
         <TailwindIndicator />
