@@ -1,12 +1,37 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { Course, courses } from "@/db/schema/course";
 import { Enrollment, enrollments } from "@/db/schema/enrollment";
+import { User, users } from "@/db/schema/user";
 
 type EnrollmentWithCourse = Enrollment & {
-  course: Course | null;
+  course: Course;
 };
+type PopulatedEnrollment = Enrollment & {
+  course: Course;
+  user: User;
+};
+
+export async function getEnrollments(): Promise<PopulatedEnrollment[]> {
+  try {
+    const populatedEnrollments = await db
+      .select()
+      .from(enrollments)
+      .innerJoin(courses, eq(courses.id, enrollments.courseId))
+      .innerJoin(users, eq(users.id, enrollments.userId));
+
+    return populatedEnrollments.map(({ enrollments, courses, users }) => ({
+      ...enrollments,
+      course: courses,
+      user: users,
+    }));
+  } catch (error) {
+    const message = (error as Error).message ?? "Error, please try again";
+    console.error("Error at getUserEnrollments", message);
+    throw { error: message };
+  }
+}
 
 export async function getUserEnrollments(
   userId: string
@@ -16,7 +41,7 @@ export async function getUserEnrollments(
       .select()
       .from(enrollments)
       .where(eq(enrollments.userId, userId))
-      .leftJoin(courses, eq(courses.id, enrollments.courseId));
+      .innerJoin(courses, eq(courses.id, enrollments.courseId));
 
     return userEnrollments.map(({ enrollments, courses }) => ({
       ...enrollments,
@@ -37,7 +62,7 @@ export async function getEnrollmentById(
       .select()
       .from(enrollments)
       .where(eq(enrollments.id, id))
-      .leftJoin(courses, eq(courses.id, enrollments.courseId));
+      .innerJoin(courses, eq(courses.id, enrollments.courseId));
 
     const { courses: course, enrollments: enrollment } = result;
 
@@ -45,6 +70,26 @@ export async function getEnrollmentById(
   } catch (error) {
     const message = (error as Error).message ?? "Error, please try again";
     console.error("Error at getEnrollmentById", message);
+    throw { error: message };
+  }
+}
+
+export async function isUserEnrolledToCourse(
+  userId: string,
+  courseId: string
+): Promise<boolean> {
+  try {
+    const [result] = await db
+      .select()
+      .from(enrollments)
+      .where(
+        and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))
+      );
+
+    return Boolean(result);
+  } catch (error) {
+    const message = (error as Error).message ?? "Error, please try again";
+    console.error("Error at isUserEnrolledToCourse", message);
     throw { error: message };
   }
 }

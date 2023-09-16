@@ -17,7 +17,7 @@ export async function getLecturesAndCourse() {
   let data = await db
     .select()
     .from(lectures)
-    .leftJoin(courses, eq(courses.id, lectures.courseId))
+    .innerJoin(courses, eq(courses.id, lectures.courseId))
     .then((res) => res);
 
   return data.map(({ lectures, courses }) => ({

@@ -18,7 +18,7 @@ export default async function Course({ params }: { params: { slug: string } }) {
     <main className="container py-8">
       <Heading>{course.title}</Heading>
       <div className="flex items-center gap-8">
-        <p className="mt-4 basis-1/2 text-gray-400">{course.description}</p>
+        <p className="mt-4 basis-1/2 text-foreground">{course.description}</p>
         {course.image && (
           <Image
             src={course.image}

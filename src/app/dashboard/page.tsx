@@ -6,6 +6,7 @@ import { Tabs, TabsContent } from "@ui/tabs";
 
 import { AnalyticsCards } from "./_components/analytics/card";
 import { CourseTable } from "./_components/course-table/course-table";
+import { EnrollmentTable } from "./_components/enrollment-table/enrollment-table";
 import { LectureTable } from "./_components/lecture-table/lecture-table";
 import { DashboardTabList } from "./_components/tabs";
 import { UserTable } from "./_components/user-table/user-table";
@@ -17,6 +18,7 @@ const tabs = [
   "users",
   "courses",
   "lectures",
+  "enrollments",
   // "reports",
   // "notifications",
 ] as const;
@@ -43,6 +45,9 @@ export default async function Dashboard({ searchParams }: SearchParamsProps) {
         </TabsContent>
         <TabsContent value="lectures">
           <LectureTable />
+        </TabsContent>
+        <TabsContent value="enrollments">
+          <EnrollmentTable />
         </TabsContent>
       </Tabs>
     </main>
