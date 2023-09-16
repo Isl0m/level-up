@@ -1,6 +1,18 @@
 {
   "signin": "/signin",
   "signup": "/signup",
+  "enrollment": {
+    "[id]": "/enrollment/[id]",
+    "lecture": {
+      "[id]": "/enrollment/lecture/[id]",
+      "self": "/enrollment/lecture"
+    },
+    "self": "/enrollment"
+  },
+  "profile": "/profile",
+  "course": {
+    "[slug]": "/course/[slug]"
+  },
   "dashboard": {
     "course": {
       "create": "/dashboard/course/create",
@@ -14,6 +26,5 @@
     "self": "/dashboard"
   },
   "home": "/",
-  "profile": "/profile",
   "test": "/test"
 }

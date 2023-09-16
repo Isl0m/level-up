@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CourseCard } from "@components/course-card";
 
 import { getUserEnrollments } from "@/lib/api/enrollment/queries";
 import { getUserAuth } from "@/lib/auth";
+import { route } from "@/lib/config";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
 import { Heading } from "@ui/heading";
 
@@ -37,7 +39,12 @@ export default async function Profile() {
         {userEnrollments.map(
           (enrollment) =>
             enrollment.course && (
-              <CourseCard course={enrollment.course} key={enrollment.id} />
+              <Link
+                href={`${route.enrollment.self}/${enrollment.id}`}
+                key={enrollment.id}
+              >
+                <CourseCard course={enrollment.course} />
+              </Link>
             )
         )}
       </div>

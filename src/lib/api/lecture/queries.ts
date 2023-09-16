@@ -33,3 +33,12 @@ export function getLectureById(id: string): Promise<Lecture | null> {
     .where(eq(lectures.id, id))
     .then((res) => res[0] ?? null);
 }
+
+export function getLecturesByCourseId(id: string): Promise<Lecture[]> {
+  return db
+    .select()
+    .from(lectures)
+    .where(eq(lectures.courseId, id))
+    .orderBy(lectures.order)
+    .then((res) => res);
+}
