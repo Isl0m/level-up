@@ -32,22 +32,26 @@ export default async function Profile() {
         </div>
       </div>
 
-      <Heading variant={"h3"} className="mt-8">
-        Course Enrollments
-      </Heading>
-      <div className="mt-4 flex gap-4">
-        {userEnrollments.map(
-          (enrollment) =>
-            enrollment.course && (
-              <Link
-                href={`${route.enrollment.self}/${enrollment.id}`}
-                key={enrollment.id}
-              >
-                <CourseCard course={enrollment.course} />
-              </Link>
-            )
-        )}
-      </div>
+      {userEnrollments.length > 0 && (
+        <>
+          <Heading variant={"h3"} className="mt-8">
+            Course Enrollments
+          </Heading>
+          <div className="mt-4 flex gap-4">
+            {userEnrollments.map(
+              (enrollment) =>
+                enrollment.course && (
+                  <Link
+                    href={`${route.enrollment.self}/${enrollment.id}`}
+                    key={enrollment.id}
+                  >
+                    <CourseCard course={enrollment.course} />
+                  </Link>
+                )
+            )}
+          </div>
+        </>
+      )}
     </main>
   );
 }
