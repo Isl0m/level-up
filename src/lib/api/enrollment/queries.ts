@@ -54,6 +54,21 @@ export async function getUserEnrollments(
   }
 }
 
+export async function getOnlyEnrollmentById(id: string): Promise<Enrollment> {
+  try {
+    const [enrollment] = await db
+      .select()
+      .from(enrollments)
+      .where(eq(enrollments.id, id));
+
+    return enrollment;
+  } catch (error) {
+    const message = (error as Error).message ?? "Error, please try again";
+    console.error("Error at getOnlyEnrollmentById", message);
+    throw { error: message };
+  }
+}
+
 export async function getEnrollmentById(
   id: string
 ): Promise<EnrollmentWithCourse> {

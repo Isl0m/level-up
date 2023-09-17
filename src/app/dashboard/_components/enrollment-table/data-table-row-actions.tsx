@@ -28,12 +28,13 @@ export function DataTableRowActions<TData>({
   refetch,
 }: DataTableRowActionsProps<TData>) {
   const router = useRouter();
-  const { mutateAsync: deleteCourse } = trpc.course.delete.useMutation();
+  const { mutateAsync: deleteEnrollment } =
+    trpc.enrollment.delete.useMutation();
 
   const handleDeleteItem = async () => {
     const isYes = confirm("Do you really want to delete");
     if (isYes) {
-      await deleteCourse({ id });
+      await deleteEnrollment({ id });
 
       if (typeof refetch === "function") {
         refetch();
@@ -41,7 +42,7 @@ export function DataTableRowActions<TData>({
     }
   };
   const handleEditItem = () => {
-    router.push(route.dashboard.course.edit + `?id=${id}`);
+    router.push(route.dashboard.enrollment.edit + `?id=${id}`);
   };
   return (
     <DropdownMenu>

@@ -19,6 +19,10 @@
       "edit": "/dashboard/course/edit"
     },
     "create-user": "/dashboard/create-user",
+    "enrollment": {
+      "create": "/dashboard/enrollment/create",
+      "edit": "/dashboard/enrollment/edit"
+    },
     "lecture": {
       "create": "/dashboard/lecture/create",
       "edit": "/dashboard/lecture/edit"

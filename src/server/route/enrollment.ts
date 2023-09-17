@@ -1,18 +1,24 @@
 import { z } from "zod";
 
-import { createEnrollment } from "@/lib/api/enrollment/mutations";
 import {
-  getEnrollmentById,
+  createEnrollment,
+  deleteEnrollment,
+  updateEnrollment,
+} from "@/lib/api/enrollment/mutations";
+import {
   getEnrollments,
   getUserEnrollments,
   isUserEnrolledToCourse,
 } from "@/lib/api/enrollment/queries";
-import { insertEnrollmentSchema } from "@/db/schema/enrollment";
+import {
+  insertEnrollmentSchema,
+  updateEnrollmentSchema,
+} from "@/db/schema/enrollment";
 
 import { protectedProcedure, router } from "../trpc";
 
 export const enrollmentRouter = router({
-  getAll: protectedProcedure.query(({ ctx }) => getEnrollments()),
+  getAll: protectedProcedure.query(() => getEnrollments()),
   get: protectedProcedure.query(({ ctx }) =>
     getUserEnrollments(ctx.session.user.id)
   ),
@@ -26,4 +32,10 @@ export const enrollmentRouter = router({
     .mutation(({ input, ctx }) =>
       createEnrollment({ ...input, userId: ctx.session.user.id })
     ),
+  update: protectedProcedure
+    .input(z.object({ id: z.string(), data: updateEnrollmentSchema }))
+    .mutation(({ input }) => updateEnrollment(input.data, input.id)),
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input }) => deleteEnrollment(input.id)),
 });

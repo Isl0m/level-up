@@ -26,7 +26,7 @@ export function DataTableToolbar<TData>({
         className="max-w-sm"
       />
       <Button variant="outline" className="border-dashed" asChild>
-        <Link href={route.dashboard.course.create}>
+        <Link href={route.dashboard.enrollment.create}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Enrollment
         </Link>
