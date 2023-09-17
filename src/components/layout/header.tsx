@@ -1,6 +1,7 @@
 import { route } from "@/lib/config";
 
 import { HeaderActins } from "./header-actions";
+import { Navigation } from "./navigation";
 
 export function Header() {
   return (
@@ -9,6 +10,7 @@ export function Header() {
         <div>
           <a href={route.home}>Level Up</a>
         </div>
+        <Navigation />
         <HeaderActins />
       </div>
     </header>

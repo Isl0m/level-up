@@ -11,7 +11,8 @@
   },
   "profile": "/profile",
   "course": {
-    "[slug]": "/course/[slug]"
+    "[slug]": "/course/[slug]",
+    "self": "/course"
   },
   "dashboard": {
     "course": {
