@@ -1,5 +1,6 @@
 # Todo
-- Lectures player
-- Course progress
-- Dashboard safety
+
+- ~~Lectures player~~ For youtube video
 - Payments
+- Dashboard safety
+- Course progress
