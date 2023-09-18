@@ -10,16 +10,18 @@ export default async function Home() {
   return (
     <main className="container space-y-8 py-8">
       <Heading>Level Up</Heading>
-      <section>
-        <Heading variant={"h3"}>Courses</Heading>
-        <div className="mt-4 flex gap-4">
-          {courses.map((course) => (
-            <Link href={`/course/${course.slug}`} key={course.id}>
-              <CourseCard course={course} />
-            </Link>
-          ))}
-        </div>
-      </section>
+      {courses.length > 0 && (
+        <section>
+          <Heading variant={"h3"}>Courses</Heading>
+          <div className="mt-4 flex gap-4">
+            {courses.map((course) => (
+              <Link href={`/course/${course.slug}`} key={course.id}>
+                <CourseCard course={course} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

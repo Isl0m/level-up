@@ -52,6 +52,11 @@ export function CreateCourseForm() {
       return;
     }
   };
+
+  const handleGenerateSlug = () => {
+    const title = form.getValues("title");
+    form.setValue("slug", title.toLowerCase().replaceAll(" ", "-"));
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -62,7 +67,12 @@ export function CreateCourseForm() {
             <FormItem>
               <FormLabel>Slug</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <div className="flex w-full items-center space-x-2">
+                  <Input {...field} />
+                  <Button type="button" onClick={handleGenerateSlug}>
+                    Generate
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

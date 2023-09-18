@@ -18,8 +18,7 @@ export function generateFakeCourse() {
 export function generateFakeLecture() {
   const title = capitalize(faker.lorem.words(2));
   const description = faker.lorem.paragraphs(3);
-  const video = faker.image.url();
   const order = 1;
 
-  return { title, description, video, order };
+  return { title, description, order };
 }

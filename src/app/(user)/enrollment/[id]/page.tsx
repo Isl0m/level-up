@@ -8,6 +8,8 @@ import { Badge } from "@ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import { Heading } from "@ui/heading";
 
+import { LecturePlayer } from "./lecture-player";
+
 export default async function Enrollment({
   params,
 }: {
@@ -24,27 +26,12 @@ export default async function Enrollment({
       <Heading>{course.title}</Heading>
       <p className="my-4 text-foreground">{course.description}</p>
 
-      <Heading variant={"h3"}>Lectures</Heading>
-      <div className="mt-4 flex gap-4">
-        {lectures.map((lecture) => (
-          <Link
-            key={lecture.id}
-            href={`${route.enrollment.lecture.self}/${lecture.id}`}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>{lecture.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="line-clamp-2 text-muted-foreground">
-                  {lecture.description}
-                </p>
-                <Badge>{lecture.order}</Badge>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      <section>
+        <Heading className="mb-4" variant={"h3"}>
+          Lectures
+        </Heading>
+        <LecturePlayer lectures={lectures} />
+      </section>
     </main>
   );
 }
