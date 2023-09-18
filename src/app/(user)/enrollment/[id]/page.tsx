@@ -24,14 +24,9 @@ export default async function Enrollment({
   return (
     <main className="container py-8">
       <Heading>{course.title}</Heading>
-      <p className="my-4 text-foreground">{course.description}</p>
+      <p className="my-8 text-foreground">{course.description}</p>
 
-      <section>
-        <Heading className="mb-4" variant={"h3"}>
-          Lectures
-        </Heading>
-        <LecturePlayer lectures={lectures} />
-      </section>
+      <LecturePlayer lectures={lectures} />
     </main>
   );
 }
