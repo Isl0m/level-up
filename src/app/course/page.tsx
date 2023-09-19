@@ -10,7 +10,7 @@ export default async function Courses() {
   return (
     <main className="container py-8">
       <Heading>Courses</Heading>
-      <div className="mt-8 flex gap-4">
+      <div className="mt-8 flex flex-wrap gap-4">
         {courses.map((course) => (
           <Link href={`/course/${course.slug}`} key={course.id}>
             <CourseCard course={course} />

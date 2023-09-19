@@ -2,5 +2,5 @@
 
 - ~~Lectures player~~ For youtube video
 - Payments
-- Dashboard safety
+- ~~Dashboard safety~~
 - Course progress

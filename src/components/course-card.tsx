@@ -13,6 +13,7 @@ export function CourseCard({ course }: { course: Course }) {
             alt={course.title}
             width={300}
             height={200}
+            className="rounded"
           />
         )}
       </CardHeader>

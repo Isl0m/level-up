@@ -13,8 +13,8 @@ export default async function Home() {
       {courses.length > 0 && (
         <section>
           <Heading variant={"h3"}>Courses</Heading>
-          <div className="mt-4 flex gap-4">
-            {courses.map((course) => (
+          <div className="mt-4 flex flex-wrap gap-4">
+            {courses.slice(0, 3).map((course) => (
               <Link href={`/course/${course.slug}`} key={course.id}>
                 <CourseCard course={course} />
               </Link>
