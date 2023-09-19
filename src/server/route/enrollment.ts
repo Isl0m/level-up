@@ -15,7 +15,7 @@ import {
   updateEnrollmentSchema,
 } from "@/db/schema/enrollment";
 
-import { protectedProcedure, router } from "../trpc";
+import { adminProcedure, protectedProcedure, router } from "../trpc";
 
 export const enrollmentRouter = router({
   getAll: protectedProcedure.query(() => getEnrollments()),
@@ -27,15 +27,19 @@ export const enrollmentRouter = router({
     .query(({ ctx, input }) =>
       isUserEnrolledToCourse(ctx.session.user.id, input.courseId)
     ),
+
+  // All users can create enrollment
   create: protectedProcedure
     .input(insertEnrollmentSchema.omit({ userId: true, id: true }))
     .mutation(({ input, ctx }) =>
       createEnrollment({ ...input, userId: ctx.session.user.id })
     ),
-  update: protectedProcedure
+
+  // Only admins can update enrollment
+  update: adminProcedure
     .input(z.object({ id: z.string(), data: updateEnrollmentSchema }))
     .mutation(({ input }) => updateEnrollment(input.data, input.id)),
-  delete: protectedProcedure
+  delete: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input }) => deleteEnrollment(input.id)),
 });

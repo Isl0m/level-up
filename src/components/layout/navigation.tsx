@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: route.home, label: "Home" },
   { href: route.course.self, label: "Courses" },
-  { href: route.dashboard.self, label: "Dashboard" },
 ];
 
 export function Navigation() {

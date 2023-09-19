@@ -24,7 +24,9 @@ export default async function Profile() {
             src={user.image || undefined}
             alt={user.name || undefined}
           />
-          <AvatarFallback>{user.name?.[0] || undefined}</AvatarFallback>
+          <AvatarFallback className="text-3xl">
+            {user.name?.[0] || undefined}
+          </AvatarFallback>
         </Avatar>
         <div>
           <Heading variant={"h3"}>{user.name}</Heading>

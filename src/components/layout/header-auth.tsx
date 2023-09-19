@@ -21,19 +21,24 @@ export function HeaderAuth() {
     <DropdownAvatar
       imageSrc={data.user.image || undefined}
       fallbackText={data.user.name?.[0] || undefined}
+      isAdmin={data.user.role === "admin"}
     />
   ) : (
     <SignIn />
   );
 }
 
+type DropdownAvatarProps = {
+  imageSrc?: string;
+  fallbackText?: string;
+  isAdmin: boolean;
+};
+
 function DropdownAvatar({
   imageSrc,
   fallbackText,
-}: {
-  imageSrc?: string;
-  fallbackText?: string;
-}) {
+  isAdmin,
+}: DropdownAvatarProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -48,6 +53,11 @@ function DropdownAvatar({
         <DropdownMenuItem>
           <Link href={route.profile}>Profile</Link>
         </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem>
+            <Link href={route.dashboard.self}>Dashboard</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <SignOut />
