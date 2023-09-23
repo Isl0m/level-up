@@ -26,7 +26,7 @@ const tabs = [
 const tabParser = z.enum(tabs).default("analytics");
 
 export default async function Dashboard({ searchParams }: SearchParamsProps) {
-  const tab = tabParser.parse(searchParams.tab);
+  const tab = await tabParser.parseAsync(searchParams.tab);
 
   return (
     <main className="container space-y-4 py-8">
