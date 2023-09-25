@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { createUserWithPassword, updateUser } from "@/lib/api/user/mutations";
 import { getUsers } from "@/lib/api/user/queries";
+import { SUPABASE } from "@/lib/supabase";
 import { insertUserSchema, updateUserSchema } from "@/db/schema/user";
 
 import { protectedProcedure, publicProcedure, router } from "../trpc";

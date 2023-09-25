@@ -51,7 +51,7 @@ function DropdownAvatar({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Link href={route.profile}>Profile</Link>
+          <Link href={route.profile.self}>Profile</Link>
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem>

@@ -4,3 +4,4 @@
 - Payments
 - ~~Dashboard safety~~
 - Course progress
+- ~~Profile image~~

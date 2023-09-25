@@ -19,15 +19,17 @@ export default async function Profile() {
   return (
     <main className="container py-8">
       <div className="flex items-center gap-2">
-        <Avatar className="h-16 w-16">
-          <AvatarImage
-            src={user.image || undefined}
-            alt={user.name || undefined}
-          />
-          <AvatarFallback className="text-3xl">
-            {user.name?.[0] || undefined}
-          </AvatarFallback>
-        </Avatar>
+        <Link href={route.profile.edit.avatar}>
+          <Avatar className="h-16 w-16">
+            <AvatarImage
+              src={user.image || undefined}
+              alt={user.name || undefined}
+            />
+            <AvatarFallback className="text-3xl">
+              {user.name?.[0] || undefined}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
         <div>
           <Heading variant={"h3"}>{user.name}</Heading>
           <p className="text-sm text-muted-foreground">{user.email}</p>

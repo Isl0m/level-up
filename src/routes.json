@@ -3,13 +3,14 @@
   "signup": "/signup",
   "enrollment": {
     "[id]": "/enrollment/[id]",
-    "lecture": {
-      "[id]": "/enrollment/lecture/[id]",
-      "self": "/enrollment/lecture"
-    },
     "self": "/enrollment"
   },
-  "profile": "/profile",
+  "profile": {
+    "edit": {
+      "avatar": "/profile/edit/avatar"
+    },
+    "self": "/profile"
+  },
   "course": {
     "[slug]": "/course/[slug]",
     "self": "/course"
@@ -31,5 +32,8 @@
     "self": "/dashboard"
   },
   "home": "/",
-  "test": "/test"
+  "test": {
+    "image": "/test/image",
+    "markdown": "/test/markdown"
+  }
 }

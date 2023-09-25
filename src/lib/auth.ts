@@ -39,7 +39,11 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, session, trigger }) {
+      if (trigger === "update" && session.image) {
+        token.picture = session.image;
+      }
+
       if (user && !user.role) {
         const res = await getUserById(user.id);
         const role = res?.role ?? "user";
