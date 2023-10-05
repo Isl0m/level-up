@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { generateFakeCourse } from "@/lib/mock";
@@ -18,7 +19,6 @@ import {
 } from "@ui/form";
 import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
-import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { insertCourseSchema } from "@/db/schema/course";
 
@@ -28,7 +28,6 @@ const inputSchema = getFormInputsSchema(insertCourseSchema);
 type Inputs = z.input<typeof inputSchema>;
 
 export function CreateCourseForm() {
-  const { toast } = useToast();
   const { back } = useRouter();
   const { mutateAsync: createCourse, isLoading } =
     trpc.course.create.useMutation();
@@ -45,10 +44,7 @@ export function CreateCourseForm() {
       back();
       form.reset();
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong",
-      });
+      toast.error("Something went wrong");
       return;
     }
   };

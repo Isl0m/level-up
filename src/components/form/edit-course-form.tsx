@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@ui/button";
@@ -17,7 +18,6 @@ import {
 } from "@ui/form";
 import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
-import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { updateCourseSchema } from "@/db/schema/course";
 
@@ -33,7 +33,6 @@ export function EditCourseForm({
   defaultValues: Inputs;
   courseId: string;
 }) {
-  const { toast } = useToast();
   const { back } = useRouter();
   const { mutateAsync: updateCourse, isLoading } =
     trpc.course.update.useMutation();
@@ -49,10 +48,7 @@ export function EditCourseForm({
       !form.formState.isDirty &&
       !Object.keys(form.formState.dirtyFields).length
     ) {
-      toast({
-        variant: "default",
-        title: "No one field was changed",
-      });
+      toast("No one field was changed");
       return;
     }
     try {
@@ -64,10 +60,8 @@ export function EditCourseForm({
       back();
       form.reset();
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong",
-      });
+      toast.error("Something went wrong");
+
       return;
     }
   };

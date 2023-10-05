@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { signInSchema } from "@/lib/validators/auth";
@@ -18,7 +19,6 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
-import { useToast } from "@ui/use-toast";
 
 import { Icons } from "../icons";
 
@@ -27,7 +27,6 @@ type Inputs = z.infer<typeof signInSchema>;
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<Inputs>({
     mode: "onChange",
@@ -46,10 +45,7 @@ export function SignInForm() {
       redirect: false,
     });
     if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: result.error,
-      });
+      toast.error(result.error);
       setIsLoading(false);
       return;
     }

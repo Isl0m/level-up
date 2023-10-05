@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@ui/button";
@@ -23,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { insertEnrollmentSchema } from "@/db/schema/enrollment";
 
@@ -33,7 +33,6 @@ const inputSchema = getFormInputsSchema(insertEnrollmentSchema);
 type Inputs = z.input<typeof inputSchema>;
 
 export function CreateEnrollmentForm() {
-  const { toast } = useToast();
   const { back } = useRouter();
   const { mutateAsync: createEnrollment, isLoading } =
     trpc.enrollment.create.useMutation();
@@ -53,10 +52,7 @@ export function CreateEnrollmentForm() {
       back();
       form.reset();
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong",
-      });
+      toast.error("Something went wrong");
       return;
     }
   };

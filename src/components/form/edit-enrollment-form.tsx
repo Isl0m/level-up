@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@ui/button";
@@ -24,7 +25,6 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Textarea } from "@ui/textarea";
-import { useToast } from "@ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { updateEnrollmentSchema } from "@/db/schema/enrollment";
 
@@ -40,7 +40,6 @@ export function EditEnrollmentForm({
   defaultValues: Inputs;
   enrollmentId: string;
 }) {
-  const { toast } = useToast();
   const { back } = useRouter();
   const { mutateAsync: updateEnrollment, isLoading } =
     trpc.enrollment.update.useMutation();
@@ -60,10 +59,7 @@ export function EditEnrollmentForm({
       !form.formState.isDirty &&
       !Object.keys(form.formState.dirtyFields).length
     ) {
-      toast({
-        variant: "default",
-        title: "No one field was changed",
-      });
+      toast("No one field was changed");
       return;
     }
     try {
@@ -76,10 +72,7 @@ export function EditEnrollmentForm({
       form.reset();
     } catch (error) {
       console.log(error);
-      toast({
-        variant: "destructive",
-        title: "Something went wrong",
-      });
+      toast.error("Something went wrong");
       return;
     }
   };
