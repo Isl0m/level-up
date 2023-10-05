@@ -25,12 +25,15 @@ export default async function Course({ params }: { params: { slug: string } }) {
       <div className="flex items-center gap-8">
         <p className="mt-4 basis-1/2 text-foreground">{course.description}</p>
         {course.image && (
-          <Image
-            src={course.image}
-            alt={course.title}
-            width={400}
-            height={300}
-          />
+          <div className="relative h-48 w-80 overflow-hidden">
+            <Image
+              src={course.image}
+              alt={course.title}
+              fill
+              style={{ objectFit: "cover" }}
+              className="rounded"
+            />
+          </div>
         )}
       </div>
       <div className="flex items-center gap-4">

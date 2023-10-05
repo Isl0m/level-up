@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { generateFakeLecture } from "@/lib/mock";
+import { getVideoDurationByLink } from "@/lib/youtube";
 import { Button } from "@ui/button";
 import {
   Form,

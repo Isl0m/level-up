@@ -8,13 +8,15 @@ export function CourseCard({ course }: { course: Course }) {
     <Card>
       <CardHeader>
         {course.image && (
-          <Image
-            src={course.image}
-            alt={course.title}
-            width={300}
-            height={200}
-            className="rounded"
-          />
+          <div className="relative h-48 w-80 overflow-hidden">
+            <Image
+              src={course.image}
+              alt={course.title}
+              fill
+              style={{ objectFit: "cover" }}
+              className="rounded"
+            />
+          </div>
         )}
       </CardHeader>
       <CardContent>

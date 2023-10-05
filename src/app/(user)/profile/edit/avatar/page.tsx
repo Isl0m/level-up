@@ -62,7 +62,9 @@ export default function EditAvatar() {
         />
       </div>
       {/* error with cache of profile pic */}
-      <Button onClick={back}>Go Back</Button>
+      <Button disabled={isLoading} onClick={back}>
+        Go Back
+      </Button>
     </main>
   );
 }
