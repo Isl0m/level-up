@@ -3,7 +3,7 @@ import { OAuthSignIn } from "@components/auth/oauth-signin";
 import { SignInForm } from "@components/auth/signin-form";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { buttonVariants } from "@ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@ui/card";
 
 export default function SignIn() {
@@ -34,9 +34,12 @@ export default function SignIn() {
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?
           </p>
-          <Button asChild variant="link">
-            <Link href={route.signup}>Sign up</Link>
-          </Button>
+          <Link
+            href={route.signup}
+            className={buttonVariants({ variant: "link" })}
+          >
+            Sign up
+          </Link>
         </CardFooter>
       </Card>
     </main>

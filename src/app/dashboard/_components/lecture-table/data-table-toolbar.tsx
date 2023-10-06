@@ -6,7 +6,7 @@ import { PlusCircle } from "lucide-react";
 import { z } from "zod";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { buttonVariants } from "@ui/button";
 import { Input } from "@ui/input";
 
 import { DataTableFacetedFilter } from "./data-table-faced-filter";
@@ -69,12 +69,16 @@ export function DataTableToolbar<TData>({
           options={courseOptions}
         />
       )}
-      <Button variant="outline" className="ml-auto border-dashed" asChild>
-        <Link href={route.dashboard.lecture.create}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Lecture
-        </Link>
-      </Button>
+      <Link
+        href={route.dashboard.lecture.create}
+        className={buttonVariants({
+          variant: "outline",
+          className: "ml-auto border-dashed",
+        })}
+      >
+        <PlusCircle className="mr-2 h-4 w-4" />
+        Lecture
+      </Link>
     </div>
   );
 }

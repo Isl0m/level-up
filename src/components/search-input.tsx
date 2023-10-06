@@ -11,7 +11,8 @@ export function SearchInput() {
   const pathname = usePathname();
   const params = useSearchParams();
 
-  const [input, setInput] = useState(params.get("query") || "");
+  const query = params.get("query") || "";
+  const [input, setInput] = useState(query);
   const debouncedInput = useDebounce(input, 300);
 
   const setSearchParam = (query: string) => {
@@ -19,7 +20,7 @@ export function SearchInput() {
   };
 
   useEffect(() => {
-    if (debouncedInput) {
+    if (debouncedInput !== query) {
       setSearchParam(debouncedInput);
     }
   }, [debouncedInput]);

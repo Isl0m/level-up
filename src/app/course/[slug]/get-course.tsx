@@ -5,7 +5,7 @@ import { Icons } from "@components/icons";
 import { toast } from "sonner";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { Button, buttonVariants } from "@ui/button";
 import { trpc } from "@/app/_trpc/client";
 import { NewEnrollment } from "@/db/schema/enrollment";
 
@@ -25,9 +25,9 @@ export function GetCourse(data: Omit<NewEnrollment, "userId" | "id">) {
 
   if (isUserEnrolled) {
     return (
-      <Button asChild>
-        <Link href={route.enrollment.self}>Go to course</Link>
-      </Button>
+      <Link href={route.enrollment.self} className={buttonVariants()}>
+        Go to course
+      </Link>
     );
   }
 

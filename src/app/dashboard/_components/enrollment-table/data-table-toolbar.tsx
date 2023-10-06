@@ -5,7 +5,7 @@ import { Table } from "@tanstack/react-table";
 import { PlusCircle } from "lucide-react";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { buttonVariants } from "@ui/button";
 import { Input } from "@ui/input";
 
 interface DataTableToolbarProps<TData> {
@@ -25,12 +25,16 @@ export function DataTableToolbar<TData>({
         }
         className="max-w-sm"
       />
-      <Button variant="outline" className="border-dashed" asChild>
-        <Link href={route.dashboard.enrollment.create}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Enrollment
-        </Link>
-      </Button>
+      <Link
+        href={route.dashboard.enrollment.create}
+        className={buttonVariants({
+          variant: "outline",
+          className: "border-dashed",
+        })}
+      >
+        <PlusCircle className="mr-2 h-4 w-4" />
+        Enrollment
+      </Link>
     </div>
   );
 }

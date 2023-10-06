@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CourseCard } from "@components/course-card";
+import { Library } from "lucide-react";
 
 import { getUserEnrollments } from "@/lib/api/enrollment/queries";
 import { getUserAuth } from "@/lib/auth";
@@ -36,7 +37,7 @@ export default async function Profile() {
         </div>
       </div>
 
-      {userEnrollments.length > 0 && (
+      {userEnrollments.length > 0 ? (
         <>
           <Heading variant={"h3"} className="mt-8">
             Course Enrollments
@@ -55,6 +56,12 @@ export default async function Profile() {
             )}
           </div>
         </>
+      ) : (
+        <div className="mt-16 flex flex-col items-center gap-2">
+          <Library className="h-12 w-12" />
+          <Heading variant={"h3"}>Pretty empty around here</Heading>
+          <p>Let&apos;s add your first enrollment.</p>
+        </div>
       )}
     </main>
   );

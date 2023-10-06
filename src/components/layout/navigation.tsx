@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { route } from "@/lib/config";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@ui/button";
 
 const navItems = [
   { href: route.home, label: "Home" },
@@ -36,10 +37,11 @@ function NavItem({ href, children }: NavItemProps) {
   return (
     <Link
       href={href}
-      className={cn(
-        "text-sm font-medium transition-colors hover:text-primary",
-        !isActive && "text-muted-foreground"
-      )}
+      className={buttonVariants({
+        variant: "ghost",
+        size: "sm",
+        className: isActive ? "text-primary" : "text-muted-foreground",
+      })}
     >
       {children}
     </Link>

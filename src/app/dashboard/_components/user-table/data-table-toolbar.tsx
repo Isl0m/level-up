@@ -5,7 +5,7 @@ import { Table } from "@tanstack/react-table";
 import { PlusCircle, RefreshCcw } from "lucide-react";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { Button, buttonVariants } from "@ui/button";
 import { Input } from "@ui/input";
 
 interface DataTableToolbarProps<TData> {
@@ -32,12 +32,16 @@ export function DataTableToolbar<TData>({
           <RefreshCcw className="mr-2 h-4 w-4" />
           Refresh
         </Button>
-        <Button variant="outline" className="border-dashed" asChild>
-          <Link href={route.dashboard["create-user"]}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            User
-          </Link>
-        </Button>
+        <Link
+          href={route.dashboard["create-user"]}
+          className={buttonVariants({
+            variant: "outline",
+            className: "border-dashed",
+          })}
+        >
+          <PlusCircle className="mr-2 h-4 w-4" />
+          User
+        </Link>
       </div>
     </div>
   );

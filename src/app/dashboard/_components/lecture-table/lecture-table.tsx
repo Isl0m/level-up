@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { route } from "@/lib/config";
-import { Button } from "@ui/button";
+import { buttonVariants } from "@ui/button";
 import { Heading } from "@ui/heading";
 import { trpc } from "@/app/_trpc/client";
 
@@ -25,9 +25,9 @@ function AddCourses() {
       <Heading variant={"h3"}>
         To add lectures you need to add courses first
       </Heading>
-      <Button asChild>
-        <Link href={route.dashboard.course.create}>Add course</Link>
-      </Button>
+      <Link href={route.dashboard.course.create} className={buttonVariants()}>
+        Add course
+      </Link>
     </div>
   );
 }

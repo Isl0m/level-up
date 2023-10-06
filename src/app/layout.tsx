@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
 import ClientProviders from "@components/providers";
 
-import { Toaster } from "@ui/toaster";
 import { Header } from "@/components/layout/header";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 
@@ -33,7 +32,6 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </ClientProviders>
-        <Toaster />
         <TailwindIndicator />
       </body>
     </html>
