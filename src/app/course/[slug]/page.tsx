@@ -21,33 +21,36 @@ export default async function Course({ params }: { params: { slug: string } }) {
 
   return (
     <main className="container py-8">
-      <Heading>{course.title}</Heading>
-      <div className="flex items-center gap-8">
-        <p className="mt-4 basis-1/2 text-foreground">{course.description}</p>
+      <Heading className="mb-8">{course.title}</Heading>
+      <div className="flex flex-col-reverse items-center gap-8 md:flex-row md:items-start">
+        <div className="basis-3/5">
+          <p className="text-sm text-foreground lg:text-base">
+            {course.description}
+          </p>
+          <div className="mt-4 flex items-center gap-4">
+            <span className="text-gray-600">${course.price}</span>
+            <GetCourse courseId={course.id} />
+          </div>
+        </div>
         {course.image && (
-          <div className="relative h-48 w-80 overflow-hidden">
+          <div className="relative h-56  w-96 overflow-hidden">
             <Image
               src={course.image}
               alt={course.title}
               fill
               style={{ objectFit: "cover" }}
-              className="rounded"
+              className="rounded-md"
             />
           </div>
         )}
       </div>
-      <div className="flex items-center gap-4">
-        <span className="text-gray-600">${course.price}</span>
-        <GetCourse courseId={course.id} />
-      </div>
+
       {lectures.length > 0 && (
         <div className="mt-8">
-          <Heading variant={"h4"}>Lectures</Heading>
-          <ul className="mt-4">
+          <Heading variant={"h3"}>Lectures</Heading>
+          <ul className="mt-4 list-disc pl-4">
             {lectures.map((lecture) => (
-              <li key={lecture.id}>
-                {lecture.order} - {lecture.title}
-              </li>
+              <li key={lecture.id}>{lecture.title}</li>
             ))}
           </ul>
         </div>
