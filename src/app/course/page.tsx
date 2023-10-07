@@ -27,10 +27,17 @@ export default async function Courses({ searchParams }: SearchParamsProps) {
   });
 
   return (
-    <main className="container py-8">
-      <Heading>Courses</Heading>
-      <SearchInput />
-      <div className="mt-8 flex flex-wrap gap-4">
+    <main className="container mt-12 flex flex-col  gap-8">
+      <div>
+        <Heading variant={"h2"}>Search our catalog</Heading>
+        <SearchInput />
+      </div>
+      <div className="">
+        <Heading variant={"h2"}>Courses</Heading>
+        <p>{courses.length} results on level up</p>
+      </div>
+      {/* FIX UI */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">
         {courses.map((course) => (
           <Link href={`/course/${course.slug}`} key={course.id}>
             <CourseCard course={course} />

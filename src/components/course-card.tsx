@@ -8,7 +8,7 @@ export function CourseCard({ course }: { course: Course }) {
     <Card>
       <CardHeader className="p-4">
         {course.image && (
-          <div className="relative h-48 w-80 overflow-hidden">
+          <div className="relative aspect-video w-full overflow-hidden">
             <Image
               src={course.image}
               alt={course.title}
