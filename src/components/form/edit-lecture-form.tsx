@@ -31,7 +31,12 @@ import { updateLectureSchema } from "@/db/schema/lecture";
 
 import { getDirtyFields } from "./helpers";
 
-const inputSchema = updateLectureSchema;
+const inputSchema = updateLectureSchema.extend({
+  video: z
+    .string()
+    .url()
+    .regex(/https:\/\/youtu\.be\//, { message: "Invalid youtube url" }),
+});
 type Inputs = z.input<typeof inputSchema>;
 
 export function EditLectureForm({
@@ -113,7 +118,7 @@ export function EditLectureForm({
           name="video"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Video</FormLabel>
+              <FormLabel>Video Url</FormLabel>
               <FormControl>
                 {/* <Input type="file" {...field} /> */}
                 <Input placeholder="Enter lecture video url..." {...field} />

@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { generateFakeLecture } from "@/lib/mock";
-import { getVideoDurationByLink } from "@/lib/youtube";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -33,7 +32,12 @@ import { insertLectureSchema } from "@/db/schema/lecture";
 
 import { getFormInputsSchema } from "./helpers";
 
-const inputSchema = getFormInputsSchema(insertLectureSchema);
+const inputSchema = getFormInputsSchema(insertLectureSchema).extend({
+  video: z
+    .string()
+    .url()
+    .regex(/https:\/\/youtu\.be\//, { message: "Invalid youtube url" }),
+});
 type Inputs = z.input<typeof inputSchema>;
 
 export function CreateLectureForm() {
@@ -95,7 +99,7 @@ export function CreateLectureForm() {
           name="video"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Video</FormLabel>
+              <FormLabel>Video Url</FormLabel>
               <FormControl>
                 {/* <Input type="file" {...field} /> */}
                 <Input placeholder="Enter lecture video url..." {...field} />
