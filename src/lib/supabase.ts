@@ -15,9 +15,10 @@ export const SUPABASE = {
   async uploadFile(file: File, userId: string) {
     const fileType =
       file.name?.split(".").at(-1) || file.type.split("/").at(-1) || "jpg";
+    const path = this._createAvatarUrl(userId, fileType);
     const { data, error } = await this.client.storage
       .from("avatar")
-      .upload(this._createAvatarUrl(userId, fileType), file, {
+      .upload(path, file, {
         cacheControl: "3600",
         upsert: true,
       });

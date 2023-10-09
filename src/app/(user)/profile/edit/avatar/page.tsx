@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icons } from "@components/icons";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 import { SUPABASE } from "@/lib/supabase";
 import { Avatar, AvatarImage } from "@ui/avatar";
@@ -25,20 +26,26 @@ export default function EditAvatar() {
     const file = e.target.files?.[0];
     const userId = session?.user.id;
     if (file && userId) {
-      const path = await SUPABASE.uploadFile(file, userId);
-      if (path) {
-        const prevImage = session.user.image;
-        if (prevImage) {
-          const deletePrev = await SUPABASE.deleteFiles([prevImage]);
+      try {
+        const path = await SUPABASE.uploadFile(file, userId);
+        if (path) {
+          const prevImage = session.user.image;
+          if (prevImage) {
+            const deletePrev = await SUPABASE.deleteFiles([prevImage]);
+          }
+          const newSession = await update({ image: path });
+          await updateUser({ data: { image: path }, id: userId });
         }
-        const newSession = await update({ image: path });
-        await updateUser({ data: { image: path }, id: userId });
+      } catch (e) {
+        toast.error("Failed to update image");
+        setIsLoading(false);
+        console.log(e);
+        // TODO fix error
       }
     }
 
     setIsLoading(false);
   };
-
   return (
     <main className="container max-w-lg py-8">
       <Heading>Edit Profile Avatar</Heading>

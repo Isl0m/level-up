@@ -50,11 +50,11 @@ function DropdownAvatar({
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
+        <DropdownMenuItem asChild className="hover:cursor-pointer">
           <Link href={route.profile.self}>Profile</Link>
         </DropdownMenuItem>
         {isAdmin && (
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild className="hover:cursor-pointer">
             <Link href={route.dashboard.self}>Dashboard</Link>
           </DropdownMenuItem>
         )}

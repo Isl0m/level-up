@@ -12,7 +12,6 @@ export const enrollments = pgTable("enrollments", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   courseId: text("courseId")
-    .unique()
     .notNull()
     .references(() => courses.id, { onDelete: "cascade" }),
   enrollmentDate: timestamp("enrollmentDate").defaultNow(),
