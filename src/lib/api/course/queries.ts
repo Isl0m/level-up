@@ -10,6 +10,14 @@ export function getCoursesCount(): Promise<number> {
     .then((res) => res[0].count);
 }
 
+export function getCoursesCountLastMonth(): Promise<number> {
+  return db
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
+    .from(courses)
+    .where(sql`"createdAt" > now() - interval '1 month'`)
+    .then((res) => res[0].count);
+}
+
 const preparedGetAllCourses = db
   .select()
   .from(courses)

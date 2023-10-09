@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { Course, courses } from "@/db/schema/course";
@@ -31,6 +31,38 @@ export async function getEnrollments(): Promise<PopulatedEnrollment[]> {
     console.error("Error at getUserEnrollments", message);
     throw { error: message };
   }
+}
+
+export function getEnrollmentsCount(): Promise<number> {
+  return db
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
+    .from(enrollments)
+    .then((res) => res[0].count);
+}
+
+export function getEnrollmentsCountLastMonth(): Promise<number> {
+  return db
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
+    .from(enrollments)
+    .where(sql`"enrollmentDate" > now() - interval '1 month'`)
+    .then((res) => res[0].count);
+}
+
+export function getRevenue(): Promise<number> {
+  return db
+    .select({ earnings: sql<number>`sum("price")`.mapWith(Number) })
+    .from(enrollments)
+    .innerJoin(courses, eq(courses.id, enrollments.courseId))
+    .then((res) => res[0].earnings);
+}
+
+export function getRevenueLastMonth(): Promise<number> {
+  return db
+    .select({ earnings: sql<number>`sum("price")`.mapWith(Number) })
+    .from(enrollments)
+    .where(sql`"enrollmentDate" > now() - interval '1 month'`)
+    .innerJoin(courses, eq(courses.id, enrollments.courseId))
+    .then((res) => res[0].earnings);
 }
 
 export async function getUserEnrollments(

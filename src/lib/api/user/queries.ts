@@ -15,14 +15,14 @@ export function getUsers(): Promise<User[]> {
 
 export function getUsersCount(): Promise<number> {
   return db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
     .from(users)
     .then((res) => res[0].count);
 }
 
 export function getUsersCountLastMonth(): Promise<number> {
   return db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: sql<number>`count(*)`.mapWith(Number) })
     .from(users)
     .where(sql`"createdAt" > now() - interval '1 month'`)
     .then((res) => res[0].count);

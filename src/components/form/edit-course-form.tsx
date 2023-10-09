@@ -132,7 +132,7 @@ export function EditCourseForm({
               <FormLabel>Price</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter course price..."
+                  placeholder="Enter course price in dollars..."
                   type="number"
                   {...field}
                 />
