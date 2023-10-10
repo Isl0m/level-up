@@ -33,19 +33,23 @@ export function Overview({ data }: { data: Record<number, Date[]> }) {
       <BarChart data={chartData}>
         <XAxis
           dataKey="name"
-          stroke="#888888"
+          stroke="hsl(240 3.8% 46.1%)"
           fontSize={12}
           tickLine={false}
           axisLine={false}
         />
         <YAxis
-          stroke="#888888"
+          stroke="hsl(240 3.8% 46.1%)"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `${value}`}
         />
-        <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+        <Bar
+          dataKey="total"
+          fill="hsl(142.1 76.2% 36.3%)"
+          radius={[4, 4, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

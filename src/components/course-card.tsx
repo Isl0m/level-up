@@ -21,7 +21,7 @@ export function CourseCard({ course }: { course: Course }) {
       </CardHeader>
       <CardContent className="p-4">
         <CardTitle>{course.title}</CardTitle>
-        <p className="mt-4 text-gray-600">${course.price}</p>
+        <p className="mt-4 text-muted-foreground">${course.price}</p>
       </CardContent>
     </Card>
   );

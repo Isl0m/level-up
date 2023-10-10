@@ -59,7 +59,7 @@ function DropdownAvatar({
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <SignOut />
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -81,7 +81,7 @@ function SignOut() {
       variant={"link"}
       size={"sm"}
       onClick={() => signOut({ redirect: false })}
-      className="hover:no-underline"
+      className="text-red-700 hover:no-underline"
     >
       Sign Out <LogOut className="ml-2 h-4 w-4" />
     </Button>

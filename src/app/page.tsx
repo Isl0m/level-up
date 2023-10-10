@@ -13,13 +13,13 @@ export default async function Home() {
   return (
     <main className="container mb-16 flex flex-col items-center gap-12">
       <section className="flex flex-col items-center gap-4 pt-28">
-        <div className="mx-auto max-w-fit rounded-full border border-gray-200 px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
-          <p className="text-sm font-semibold text-slate-700">
+        <div className="mx-auto max-w-fit select-none rounded-full border border-slate-200 px-7 py-2 shadow-md backdrop-blur transition-all hover:border-primary hover:bg-background/50 dark:border-slate-700 dark:hover:border-primary">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             Level Up in public!
           </p>
         </div>
         <Heading className="max-w-3xl text-center">
-          Next level online <span className="text-blue-700">learning</span>{" "}
+          Next level online <span className="text-primary">learning</span>{" "}
           experience
         </Heading>
         <p className="max-w-prose text-foreground">

@@ -23,17 +23,17 @@ export default async function Course({ params }: { params: { slug: string } }) {
     <main className="container py-8">
       <Heading className="mb-8">{course.title}</Heading>
       <div className="flex flex-col-reverse items-center gap-8 md:flex-row md:items-start">
-        <div className="basis-3/5">
+        <div className="basis-7/12">
           <p className="text-sm text-foreground lg:text-base">
             {course.description}
           </p>
           <div className="mt-4 flex items-center gap-4">
-            <span className="text-gray-600">${course.price}</span>
+            <span className="text-muted-foreground">${course.price}</span>
             <GetCourse courseId={course.id} />
           </div>
         </div>
         {course.image && (
-          <div className="relative h-56  w-96 overflow-hidden">
+          <div className="relative aspect-video basis-5/12 overflow-hidden">
             <Image
               src={course.image}
               alt={course.title}

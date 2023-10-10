@@ -48,7 +48,7 @@ export function LecturePlayer({ lectures }: { lectures: Lecture[] }) {
           {lectures.map(
             (lecture, index) =>
               lecture.video && (
-                <div className="flex items-center space-x-2" key={index}>
+                <div className="flex items-center space-x-2 " key={index}>
                   <RadioGroupItem value={lecture.video} id={lecture.id} />
                   <Label htmlFor={lecture.id}>{lecture.title}</Label>
                 </div>

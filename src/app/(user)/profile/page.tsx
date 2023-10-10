@@ -40,7 +40,7 @@ export default async function Profile() {
       {userEnrollments.length > 0 ? (
         <>
           <Heading variant={"h3"} className="mt-8">
-            Course Enrollments
+            Enrollments
           </Heading>
           <div className="mt-4 grid  grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {userEnrollments.map(
