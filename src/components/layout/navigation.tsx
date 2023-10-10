@@ -33,7 +33,7 @@ type NavItemProps = {
 function NavItem({ href, children }: NavItemProps) {
   const pathname = usePathname();
   const isActive =
-    pathname.slice(1).match(href.slice(1) || "/") || pathname === href;
+    pathname.split("/")[1].match(href.slice(1) || "/") || pathname === href;
   return (
     <Link
       href={href}

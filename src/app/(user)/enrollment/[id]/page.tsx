@@ -17,7 +17,7 @@ export default async function Enrollment({
 }) {
   const enrollment = await getEnrollmentById(params.id);
   if (enrollment.course === null) {
-    redirect(route.profile);
+    redirect(route.profile.self);
   }
   const { course } = enrollment;
   const lectures = await getLecturesByCourseId(course.id);

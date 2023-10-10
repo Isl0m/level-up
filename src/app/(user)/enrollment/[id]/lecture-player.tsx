@@ -25,16 +25,20 @@ export function LecturePlayer({ lectures }: { lectures: Lecture[] }) {
   const videoId = getVideoId(video);
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row">
-      <div className="md:basis-2/3">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="col-span-5">
         {videoId && (
           <YouTube
             videoId={videoId}
-            iframeClassName="w-full md:w-[65dvw] aspect-[16/9]"
+            style={{
+              width: "100%",
+              aspectRatio: "16/9",
+            }}
+            iframeClassName="w-full h-full"
           />
         )}
       </div>
-      <div>
+      <div className="col-span-2">
         <Heading variant={"h3"}>Lectures</Heading>
         <RadioGroup
           className="w-sm mt-4"
