@@ -37,10 +37,9 @@ export default function EditAvatar() {
           await updateUser({ data: { image: path }, id: userId });
         }
       } catch (e) {
+        console.log(e);
         toast.error("Failed to update image");
         setIsLoading(false);
-        console.log(e);
-        // TODO fix error
       }
     }
 
