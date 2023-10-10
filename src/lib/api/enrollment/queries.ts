@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { Course, courses } from "@/db/schema/course";
@@ -18,6 +18,7 @@ export async function getEnrollments(): Promise<PopulatedEnrollment[]> {
     const populatedEnrollments = await db
       .select()
       .from(enrollments)
+      .orderBy(desc(enrollments.enrollmentDate))
       .innerJoin(courses, eq(courses.id, enrollments.courseId))
       .innerJoin(users, eq(users.id, enrollments.userId));
 

@@ -43,7 +43,6 @@ export const authOptions: NextAuthOptions = {
       if (trigger === "update" && session.image) {
         token.picture = session.image;
       }
-
       if (user && !user.role) {
         const res = await getUserById(user.id);
         const role = res?.role ?? "user";
@@ -51,6 +50,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...user,
           role,
+          picture: user.image,
         };
       }
       if (user) {

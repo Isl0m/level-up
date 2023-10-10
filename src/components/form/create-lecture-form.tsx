@@ -49,7 +49,6 @@ export function CreateLectureForm() {
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(inputSchema),
-    defaultValues: generateFakeLecture(),
   });
 
   const onSubmit = async (data: Inputs) => {

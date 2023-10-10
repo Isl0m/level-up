@@ -5,7 +5,7 @@ export async function RecentEnrollments() {
   const enrollments = await getEnrollments();
   return (
     <div className="space-y-8">
-      {enrollments.map((item) => (
+      {enrollments.slice(0, 6).map((item) => (
         <div className="flex items-center" key={item.id}>
           <Avatar className="h-9 w-9">
             <AvatarImage

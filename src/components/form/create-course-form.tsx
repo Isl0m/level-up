@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { generateFakeCourse } from "@/lib/mock";
 import { Button } from "@ui/button";
 import {
   Form,
@@ -35,7 +34,6 @@ export function CreateCourseForm() {
   const form = useForm<Inputs>({
     mode: "onChange",
     resolver: zodResolver(inputSchema),
-    defaultValues: generateFakeCourse(),
   });
 
   const onSubmit = async (data: Inputs) => {

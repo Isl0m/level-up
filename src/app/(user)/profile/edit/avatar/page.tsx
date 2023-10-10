@@ -35,6 +35,7 @@ export default function EditAvatar() {
           }
           const newSession = await update({ image: path });
           await updateUser({ data: { image: path }, id: userId });
+          toast.success("Image updated");
         }
       } catch (e) {
         console.log(e);

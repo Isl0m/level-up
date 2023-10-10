@@ -18,14 +18,8 @@ export function getCoursesCountLastMonth(): Promise<number> {
     .then((res) => res[0].count);
 }
 
-const preparedGetAllCourses = db
-  .select()
-  .from(courses)
-  .orderBy(courses.createdAt)
-  .prepare("get-all-courses");
-
 export function getCourses(): Promise<Course[]> {
-  return preparedGetAllCourses.execute();
+  return db.select().from(courses).orderBy(courses.createdAt);
 }
 
 export function getCourseById(id: string): Promise<Course | null> {
