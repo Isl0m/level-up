@@ -6,6 +6,7 @@ Level Up is an online learning platform that offers a wide range of courses to h
 
 - Typescript
 - NextJs
+- Trpc
 - Tailwind CSS
 - Drizzle Orm
 
