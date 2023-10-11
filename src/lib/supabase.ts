@@ -17,7 +17,7 @@ export const SUPABASE = {
       file.name?.split(".").at(-1) || file.type.split("/").at(-1) || "jpg";
     const path = this._createAvatarUrl(userId, fileType);
     const { data, error } = await this.client.storage
-      .from("avatars")
+      .from("avatar")
       .upload(path, file, {
         cacheControl: "3600",
         upsert: true,
@@ -30,7 +30,7 @@ export const SUPABASE = {
     throw error;
   },
   async deleteFiles(filePaths: string[]) {
-    return await this.client.storage.from("avatars").remove(filePaths);
+    return await this.client.storage.from("avatar").remove(filePaths);
   },
 
   async listOfFiles(folder: string) {
@@ -39,6 +39,6 @@ export const SUPABASE = {
       .list(folder, { sortBy: { column: "created_at", order: "desc" } });
   },
   _getAvatarUrl(path: string) {
-    return `${supabaseUrl}/storage/v1/object/public/avatars/${path}`;
+    return `${supabaseUrl}/storage/v1/object/public/avatar/${path}`;
   },
 };

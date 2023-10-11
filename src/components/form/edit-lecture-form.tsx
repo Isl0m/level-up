@@ -35,7 +35,8 @@ const inputSchema = updateLectureSchema.extend({
   video: z
     .string()
     .url()
-    .regex(/https:\/\/youtu\.be\//, { message: "Invalid youtube url" }),
+    .regex(/https:\/\/youtu\.be\//, { message: "Invalid youtube url" })
+    .optional(),
 });
 type Inputs = z.input<typeof inputSchema>;
 
